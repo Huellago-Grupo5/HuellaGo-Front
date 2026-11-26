@@ -1,0 +1,105 @@
+<main class="auth-page">
+  <div class="auth-container">
+    <section class="auth-card" aria-labelledby="login-title">
+      <div class="auth-form">
+        <a routerLink="/" class="back-btn" aria-label="Volver">
+          <img src="assets/images/Flecha.png" alt="" />
+        </a>
+
+        <h1 id="login-title">Accede a tu cuenta</h1>
+        <p class="auth-intro">Inicia sesión para continuar</p>
+
+        <form class="auth-fields" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <label class="visually-hidden" for="login-email">Correo electrónico</label>
+          <input
+            id="login-email"
+            type="email"
+            formControlName="correo"
+            placeholder="Correo electrónico"
+            autocomplete="email"
+            [attr.aria-invalid]="form.controls.correo.invalid && form.controls.correo.touched"
+            aria-describedby="login-email-error"
+          />
+          <span
+            id="login-email-error"
+            class="field-error"
+            *ngIf="form.controls.correo.touched && form.controls.correo.errors?.['required']"
+          >El correo es obligatorio.</span>
+          <span
+            class="field-error"
+            *ngIf="form.controls.correo.touched && form.controls.correo.errors?.['email']"
+          >Escribe un correo válido.</span>
+          <span
+            class="field-error"
+            *ngIf="form.controls.correo.touched && form.controls.correo.errors?.['maxlength']"
+          >El correo admite hasta 120 caracteres.</span>
+
+          <label class="visually-hidden" for="login-password">Contraseña</label>
+          <input
+            id="login-password"
+            type="password"
+            formControlName="contrasena"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+            [attr.aria-invalid]="form.controls.contrasena.invalid && form.controls.contrasena.touched"
+            aria-describedby="login-password-error"
+          />
+          <span
+            id="login-password-error"
+            class="field-error"
+            *ngIf="form.controls.contrasena.touched && form.controls.contrasena.errors?.['required']"
+          >La contraseña es obligatoria.</span>
+          <span
+            class="field-error"
+            *ngIf="form.controls.contrasena.touched && form.controls.contrasena.errors?.['maxlength']"
+          >La contraseña admite hasta 72 caracteres.</span>
+
+          <button type="button" class="forgot" (click)="openForgotPassword()">
+            ¿Olvidaste tu contraseña?
+          </button>
+
+          <button class="btn-primary" type="submit" [disabled]="loading">
+            {{ loading ? 'Iniciando sesión…' : 'Iniciar Sesión' }}
+          </button>
+        </form>
+
+        <p class="auth-notice error" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="auth-notice" role="status" *ngIf="successMessage">{{ successMessage }}</p>
+
+        <div class="divider"><span>o</span></div>
+        <button class="btn-google" type="button" disabled>Continuar con Google</button>
+        <button class="btn-microsoft" type="button" disabled>Continuar con Microsoft</button>
+
+        <p class="bottom-link">
+          ¿No tienes cuenta?
+          <a routerLink="/registro">Regístrate aquí</a>
+        </p>
+      </div>
+
+      <div class="auth-image">
+        <img src="assets/images/Planeta.png" alt="Ilustración del planeta HuellaGo" />
+      </div>
+    </section>
+  </div>
+</main>
+
+<div
+  class="forgot-modal-overlay"
+  *ngIf="forgotModalOpen"
+  role="presentation"
+  (click)="closeForgotPassword()"
+>
+  <section
+    class="forgot-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="forgot-title"
+    (click)="$event.stopPropagation()"
+  >
+    <h2 id="forgot-title">{{ forgotError ? 'Revisa tu correo' : 'Recuperar contraseña' }}</h2>
+    <p *ngIf="forgotLoading">Enviando la solicitud…</p>
+    <p *ngIf="forgotMessage">{{ forgotMessage }}</p>
+    <p class="form-error" role="alert" *ngIf="forgotError">{{ forgotError }}</p>
+    <button class="btn-primary" type="button" (click)="closeForgotPassword()">Entendido</button>
+  </section>
+</div>

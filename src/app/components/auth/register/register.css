@@ -1,0 +1,16 @@
+.password-hint {
+  margin-top: -10px;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}

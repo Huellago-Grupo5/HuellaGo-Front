@@ -1,1 +1,294 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body,
+button,
+input {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #f8faf8;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.auth-card {
+  display: flex;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgb(0 0 0 / 8%);
+}
+
+.auth-form {
+  flex: 1;
+  padding: 60px;
+}
+
+.auth-form h1 {
+  margin: 0 0 10px;
+  color: #243b53;
+  font-size: 42px;
+}
+
+.auth-intro {
+  margin: 0 0 30px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.back-btn {
+  display: inline-flex;
+  width: 55px;
+  height: 55px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  border-radius: 50%;
+  background: #f4f7f5;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: #e8f8ec;
+}
+
+.back-btn img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  transition: transform 0.2s;
+}
+
+.back-btn:hover img {
+  transform: translateX(-3px);
+}
+
+.auth-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-fields input:not([type='checkbox']) {
+  width: 100%;
+  min-height: 50px;
+  padding: 15px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  outline: none;
+  background: #fff;
+  color: #243b53;
+  font-size: 15px;
+}
+
+.auth-fields input:focus {
+  border-color: #46c96b;
+  box-shadow: 0 0 0 3px rgb(70 201 107 / 14%);
+}
+
+.auth-fields input[aria-invalid='true'] {
+  border-color: #c2413b;
+}
+
+.field-error,
+.form-error {
+  color: #a8322b;
+  font-size: 13px;
+}
+
+.field-error {
+  margin-top: -10px;
+}
+
+.forgot {
+  align-self: flex-end;
+  color: #f59e0b;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.forgot:hover,
+.bottom-link a:hover {
+  text-decoration: underline;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 10px;
+  background: #46c96b;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #38b85c;
+}
+
+.btn-primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 25px 0;
+  color: #888;
+}
+
+.divider::before,
+.divider::after {
+  height: 1px;
+  flex: 1;
+  background: #ddd;
+  content: '';
+}
+
+.btn-google,
+.btn-microsoft {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  background: #fff;
+  color: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.bottom-link {
+  margin: 20px 0 0;
+  color: #6b7280;
+  text-align: center;
+}
+
+.bottom-link a {
+  color: #46c96b;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.terms-row input {
+  margin-top: 3px;
+  accent-color: #46c96b;
+}
+
+.auth-image {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #eef8f0;
+}
+
+.auth-image img {
+  width: 100%;
+  max-width: 520px;
+}
+
+.auth-notice {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #e8f8ec;
+  color: #215c34;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.auth-notice.error {
+  background: #fff0ef;
+  color: #a8322b;
+}
+
+.forgot-modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgb(0 0 0 / 45%);
+  inset: 0;
+}
+
+.forgot-modal {
+  width: min(380px, 100%);
+  padding: 40px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 15px 40px rgb(0 0 0 / 15%);
+  text-align: center;
+}
+
+.forgot-modal h2 {
+  margin: 0 0 10px;
+  color: #243b53;
+  font-size: 22px;
+}
+
+.forgot-modal p {
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .auth-page {
+    padding: 20px;
+  }
+
+  .auth-card {
+    flex-direction: column;
+  }
+
+  .auth-image {
+    display: none;
+  }
+
+  .auth-form {
+    padding: 35px;
+  }
+
+  .auth-form h1 {
+    font-size: 32px;
+  }
+}
