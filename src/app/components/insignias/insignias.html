@@ -1,0 +1,71 @@
+<main class="badges-page">
+  <section class="welcome">
+    <div><p class="eyebrow">{{ 'badges.eyebrow' | transloco }}</p><h1>{{ 'badges.title' | transloco }}</h1><p>{{ 'badges.intro' | transloco }}</p></div>
+    <button class="refresh-button" type="button" (click)="loadData()" [disabled]="loading"><span aria-hidden="true">↻</span> {{ (loading ? 'badges.refreshing' : 'badges.refresh') | transloco }}</button>
+  </section>
+
+  <div class="message error-message" role="alert" *ngIf="error"><span>{{ error }}</span><button type="button" (click)="loadData()" [disabled]="loading">{{ 'badges.retry' | transloco }}</button></div>
+  <div class="message warning-message" role="status" *ngIf="progressWarning && logros"><span>{{ progressWarning }} {{ 'badges.progressWarning' | transloco }}</span></div>
+  <section class="loading" *ngIf="loading && !logros" role="status"><span class="spinner"></span><p>{{ 'badges.loading' | transloco }}</p></section>
+
+  <ng-container *ngIf="logros as summary">
+    <div class="tabs" role="tablist" [attr.aria-label]="'badges.rewards' | transloco">
+      <button type="button" role="tab" [attr.aria-selected]="panel === 'insignias'" [class.active]="panel === 'insignias'" (click)="setPanel('insignias')">{{ 'badges.badges' | transloco }}</button>
+      <button type="button" role="tab" [attr.aria-selected]="panel === 'logros'" [class.active]="panel === 'logros'" (click)="setPanel('logros')">{{ 'badges.achievements' | transloco }}</button>
+    </div>
+
+    <section class="progress-card">
+      <h2>{{ 'badges.progress' | transloco }}</h2>
+      <div class="progress-body">
+        <div class="level-icon" aria-hidden="true">🛡️</div>
+        <div class="level-info"><span class="field-label">{{ 'badges.level' | transloco }}</span><h3>{{ 'badges.levelNumber' | transloco:{ level: summary.nivel } }}</h3>
+          <div class="level-track" role="progressbar" [attr.aria-valuenow]="levelProgress" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Progreso al siguiente nivel: ' + levelProgress + '%'">
+            <div class="level-fill" [style.width.%]="levelProgress"></div>
+          </div>
+          <span class="level-detail">{{ 'badges.nextLevel' | transloco:{ current: summary.ecoPuntos | number, target: nextLevelTotal | number } }}</span>
+        </div>
+        <div class="points-card"><span class="points-number">{{ summary.ecoPuntos | number }}</span><span class="points-label">{{ 'badges.ecoPoints' | transloco }}</span></div>
+      </div>
+    </section>
+
+    <ng-container *ngIf="panel === 'insignias'">
+      <section class="badge-section">
+        <h2>{{ 'badges.unlocked' | transloco:{ earned: earnedBadges.length, total: badges.length } }}</h2>
+        <div class="badge-grid" *ngIf="earnedBadges.length; else noEarned">
+          <article class="badge-card" *ngFor="let badge of earnedBadges">
+            <span class="badge-icon" aria-hidden="true">{{ iconFor(badge) }}</span><h3>{{ badge.nombre }}</h3><p>{{ badge.descripcion }}</p>
+            <span class="earned-date">{{ 'badges.obtained' | transloco:{ date: formatDate(badge.fechaObtencion) } }}</span>
+          </article>
+        </div>
+        <ng-template #noEarned><p class="empty-state">{{ 'badges.empty' | transloco }}</p></ng-template>
+      </section>
+
+      <section class="badge-section">
+        <h2>{{ 'badges.next' | transloco }}</h2>
+        <div class="badge-grid" *ngIf="pendingBadges.length; else allEarned">
+          <article class="badge-card locked-card" *ngFor="let badge of pendingBadges">
+            <span class="badge-icon" aria-hidden="true">{{ iconFor(badge) }}</span><h3>{{ badge.nombre }}</h3><p>{{ badge.descripcion }}</p>
+            <ng-container *ngIf="progressFor(badge) as progress; else noProgress">
+              <div class="badge-track" role="progressbar" [attr.aria-valuenow]="progressPercent(badge)" aria-valuemin="0" aria-valuemax="100" [attr.aria-label]="'Progreso para ' + badge.nombre">
+                <div class="badge-fill" [style.width.%]="progressPercent(badge)"></div>
+              </div><span class="badge-progress">{{ progress.current | number }} / {{ progress.target | number }} {{ progress.unit }}</span>
+            </ng-container>
+              <ng-template #noProgress><span class="badge-progress" *ngIf="!completedChallengesAvailable && requiredChallengeCategory(badge); else unsupported">{{ 'badges.unavailable' | transloco }}</span><ng-template #unsupported><span class="badge-progress">{{ 'badges.notDefined' | transloco }}</span></ng-template></ng-template>
+          </article>
+        </div>
+        <ng-template #allEarned><p class="empty-state">{{ 'badges.all' | transloco }}</p></ng-template>
+      </section>
+    </ng-container>
+
+    <section class="badge-section achievement-history" *ngIf="panel === 'logros'">
+      <h2>{{ 'badges.history' | transloco }}</h2>
+      <p class="section-description">{{ 'badges.historyHelp' | transloco }}</p>
+      <div class="history-list" *ngIf="earnedBadges.length; else noHistory">
+        <article class="history-row" *ngFor="let badge of earnedBadges">
+          <span class="history-icon" aria-hidden="true">{{ iconFor(badge) }}</span><div class="history-copy"><strong>{{ badge.nombre }}</strong><span>{{ badge.descripcion }}</span><small>{{ formatDate(badge.fechaObtencion) }}</small></div><span class="obtained-label">{{ 'badges.unlockedState' | transloco }}</span>
+        </article>
+      </div>
+      <ng-template #noHistory><p class="empty-state">{{ 'badges.emptyHistory' | transloco }}</p></ng-template>
+    </section>
+  </ng-container>
+</main>

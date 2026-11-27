@@ -1,0 +1,114 @@
+<main class="onboarding-page">
+  <div class="onboarding-shell">
+    <section class="wizard-panel">
+      <header class="wizard-header">
+        <div>
+          <h1>{{ 'onboarding.welcome' | transloco }}</h1>
+          <p>{{ 'onboarding.intro' | transloco }}</p>
+        </div>
+        <span class="step-badge">{{ currentStep === 4 ? ('onboarding.result' | transloco) : ('onboarding.step' | transloco:{ current: currentStep + 1 }) }}</span>
+      </header>
+      <div class="progress-track" role="progressbar" [attr.aria-valuenow]="(currentStep + 1) * 20" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-value" [style.width.%]="(currentStep + 1) * 20"></div>
+      </div>
+
+      <div class="loading-state" *ngIf="loading">{{ 'onboarding.loading' | transloco }}</div>
+
+      <section class="load-failure" *ngIf="!loading && loadError" aria-live="polite">
+        <h2>{{ 'onboarding.loadError' | transloco }}</h2>
+        <p>{{ errorMessage || ('onboarding.connection' | transloco) }}</p>
+        <button type="button" class="primary-btn" (click)="retryLoad()">{{ 'onboarding.retry' | transloco }}</button>
+      </section>
+
+      <ng-container *ngIf="!loading && !loadError && currentStep === 0">
+        <section class="step-content">
+          <h2>{{ 'onboarding.objectives' | transloco }}</h2>
+          <p class="subtitle">{{ 'onboarding.selectObjectives' | transloco }}</p>
+          <div class="goal-grid">
+            <button type="button" class="goal-card" *ngFor="let objective of objectives"
+              [class.selected]="selectedObjectiveIds.has(objective.id)" [attr.aria-pressed]="selectedObjectiveIds.has(objective.id)"
+              (click)="toggleObjective(objective.id)">
+              <img [src]="objectiveImage(objective.nombre)" alt="" />
+              <span>{{ objective.nombre }}</span>
+              <small>{{ objective.descripcion }}</small>
+            </button>
+          </div>
+          <p class="empty-state" *ngIf="objectives.length === 0">{{ 'onboarding.noObjectives' | transloco }}</p>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !loadError && currentStep === 1">
+        <section class="step-content">
+          <h2>🚲 {{ 'onboarding.transport' | transloco }}</h2>
+          <form [formGroup]="transportForm" class="wizard-form">
+            <div class="field"><label for="transport-mode">{{ 'onboarding.mainTransport' | transloco }}</label>
+              <select id="transport-mode" formControlName="medio"><option value="Bicicleta">{{ 'onboarding.bicycle' | transloco }}</option><option value="Bus">{{ 'onboarding.bus' | transloco }}</option><option value="Auto">{{ 'onboarding.car' | transloco }}</option><option value="Moto">{{ 'onboarding.motorcycle' | transloco }}</option><option value="Caminando">{{ 'onboarding.walking' | transloco }}</option></select>
+            </div>
+            <div class="field"><label for="transport-km">{{ 'onboarding.kmWeek' | transloco }}</label>
+              <input id="transport-km" type="number" min="0.01" step="0.1" formControlName="kmSemana" />
+              <small *ngIf="transportForm.controls.kmSemana.touched && transportForm.controls.kmSemana.invalid">{{ 'onboarding.positive' | transloco }}</small>
+            </div>
+            <div class="field"><label for="transport-days">{{ 'onboarding.daysWeek' | transloco }}</label>
+              <select id="transport-days" formControlName="diasSemana"><option *ngFor="let day of [1,2,3,4,5,6,7]" [ngValue]="day">{{ day }}</option></select>
+            </div>
+          </form>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !loadError && currentStep === 2">
+        <section class="step-content">
+          <h2>⚡ {{ 'onboarding.energy' | transloco }}</h2>
+          <form [formGroup]="energyForm" class="wizard-form">
+            <div class="field"><label for="home-type">{{ 'onboarding.homeType' | transloco }}</label><select id="home-type" formControlName="vivienda"><option value="Casa">{{ 'onboarding.house' | transloco }}</option><option value="Departamento">{{ 'onboarding.apartment' | transloco }}</option></select></div>
+            <div class="field"><label for="home-people">{{ 'onboarding.people' | transloco }}</label><input id="home-people" type="number" min="1" step="1" formControlName="personas" /><small *ngIf="energyForm.controls.personas.touched && energyForm.controls.personas.invalid">{{ 'onboarding.atLeastOne' | transloco }}</small></div>
+            <div class="field"><label for="energy-source">{{ 'onboarding.source' | transloco }}</label><select id="energy-source" formControlName="fuente"><option value="Electricidad">{{ 'onboarding.electricity' | transloco }}</option><option value="Gas">{{ 'onboarding.gas' | transloco }}</option><option value="Solar">{{ 'onboarding.solar' | transloco }}</option></select></div>
+          </form>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !loadError && currentStep === 3">
+        <section class="step-content">
+          <h2>🍎 {{ 'onboarding.foodWaste' | transloco }}</h2>
+          <form [formGroup]="foodWasteForm" class="wizard-form">
+            <div class="field"><label for="food-type">{{ 'onboarding.foodType' | transloco }}</label><select id="food-type" formControlName="tipo"><option value="Vegana">{{ 'onboarding.vegan' | transloco }}</option><option value="Vegetariana">{{ 'onboarding.vegetarian' | transloco }}</option><option value="Mixta">{{ 'onboarding.mixed' | transloco }}</option></select></div>
+            <div class="field"><label for="plastic-level">{{ 'onboarding.plastic' | transloco }}</label><select id="plastic-level" formControlName="plasticos"><option value="Bajo">{{ 'onboarding.low' | transloco }}</option><option value="Medio">{{ 'onboarding.medium' | transloco }}</option><option value="Alto">{{ 'onboarding.high' | transloco }}</option></select></div>
+            <div class="field"><label>{{ 'onboarding.recycleQuestion' | transloco }}</label><div class="toggle-buttons"><button type="button" [class.active]="foodWasteForm.controls.reciclas.value" (click)="foodWasteForm.controls.reciclas.setValue(true)">{{ 'onboarding.yes' | transloco }}</button><button type="button" [class.active]="!foodWasteForm.controls.reciclas.value" (click)="foodWasteForm.controls.reciclas.setValue(false)">{{ 'onboarding.no' | transloco }}</button></div></div>
+          </form>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !loadError && currentStep === 4 && result">
+        <section class="result-screen">
+          <h2>{{ 'onboarding.resultReady' | transloco }}</h2>
+          <p class="subtitle">{{ 'onboarding.currentImpact' | transloco }}</p>
+          <div class="footprint-circle"><div class="circle-content"><strong>{{ result.co2Total | number:'1.0-2' }}</strong><span>{{ result.unidad }} / {{ result.periodo }}</span></div></div>
+          <div class="level-badge">{{ 'onboarding.impactLevel' | transloco:{ level: result.nivelImpacto } }}</div>
+          <p class="method-note">{{ result.metodologia }}</p>
+          <h3>{{ 'dashboard.references' | transloco }}</h3>
+          <div class="equivalents" *ngIf="equivalences">
+            <article><img src="assets/images/arbol.png" alt="" /><strong>{{ equivalences.arboles }}</strong><span>{{ 'onboarding.treeHypothetical' | transloco }}</span></article>
+            <article><img src="assets/images/bike.png" alt="" /><strong>{{ equivalences.bicicletaKm }}</strong><span>{{ 'onboarding.bikeEquivalent' | transloco }}</span></article>
+            <article><img src="assets/images/reciclaje.png" alt="" /><strong>{{ equivalences.reciclajeKg }}</strong><span>{{ 'onboarding.recyclingEquivalent' | transloco }}</span></article>
+          </div>
+          <p class="method-note" *ngIf="equivalences">{{ equivalences.advertencia }}</p>
+          <button class="primary-btn dashboard-btn" type="button" (click)="goToDashboard()">{{ 'onboarding.goDashboard' | transloco }}</button>
+        </section>
+      </ng-container>
+
+      <p class="error-message" role="alert" *ngIf="errorMessage && !loadError">{{ errorMessage }}</p>
+      <div class="navigation" *ngIf="!loading && !loadError && currentStep < 4">
+        <button type="button" class="secondary-btn" (click)="previous()" [style.visibility]="currentStep === 0 ? 'hidden' : 'visible'" [disabled]="saving">{{ 'onboarding.previous' | transloco }}</button>
+        <button type="button" class="primary-btn" (click)="next()" [disabled]="saving || objectives.length === 0 && currentStep === 0">
+          {{ (saving ? 'onboarding.saving' : currentStep === 3 ? 'onboarding.calculate' : 'onboarding.next') | transloco }}
+        </button>
+      </div>
+    </section>
+
+    <aside class="welcome-panel">
+      <img src="assets/images/Bienvenido.png" alt="HuellaGo" />
+      <h2>{{ 'onboarding.future' | transloco }}</h2>
+      <p>{{ 'onboarding.futureIntro' | transloco }}</p>
+      <div class="features"><span>{{ 'onboarding.reforestation' | transloco }}</span><span>{{ 'onboarding.recyclingLabel' | transloco }}</span><span>{{ 'onboarding.cleanEnergy' | transloco }}</span></div>
+    </aside>
+  </div>
+</main>

@@ -1,0 +1,57 @@
+<main class="ranking-page">
+  <section class="welcome">
+    <div><p class="eyebrow">{{ 'challenges.community' | transloco }}</p><h1>{{ 'ranking.title' | transloco }}</h1><p>{{ 'ranking.intro' | transloco }}</p></div>
+    <button class="refresh-button" type="button" (click)="loadRanking()" [disabled]="loading"><span aria-hidden="true">↻</span> {{ (loading ? 'ranking.refreshing' : 'ranking.refresh') | transloco }}</button>
+  </section>
+
+  <p class="period-note">{{ 'ranking.basis' | transloco }}</p>
+
+  <div class="status error" role="alert" *ngIf="error">
+    <span>{{ error }}<small *ngIf="ranking"> {{ 'ranking.lastResult' | transloco }}</small></span>
+    <button type="button" (click)="loadRanking()" [disabled]="loading">{{ 'ranking.retry' | transloco }}</button>
+  </div>
+
+  <section class="loading" *ngIf="loading && !ranking" role="status"><span class="spinner"></span><p>{{ 'ranking.loading' | transloco }}</p></section>
+
+  <ng-container *ngIf="ranking">
+    <div class="status info" *ngIf="ranking.mensaje && participants.length < 2"><span>{{ ranking.mensaje }}</span></div>
+    <section class="ranking-grid" *ngIf="participants.length">
+      <article class="ranking-card podium-card">
+        <h2>{{ 'ranking.top' | transloco }}</h2>
+        <div class="podium">
+          <div class="podium-item" *ngFor="let entry of podium" [ngClass]="entry.place" [class.is-me]="entry.participant.posicion === ranking.miPosicion">
+            <span class="medal" [attr.aria-label]="('ranking.position' | transloco) + ' ' + entry.participant.posicion">
+              <span class="medal-symbol" aria-hidden="true">{{ entry.place === 'first' ? '🥇' : entry.place === 'second' ? '🥈' : '🥉' }}</span>
+              <span class="medal-number">{{ entry.participant.posicion }}</span>
+            </span>
+            <h3>{{ entry.participant.nombreVisible }}<span *ngIf="entry.participant.posicion === ranking.miPosicion"> {{ 'ranking.you' | transloco }}</span></h3>
+            <span class="points">{{ formatPoints(entry.participant.ecoPuntos) }} {{ 'ranking.points' | transloco }}</span>
+            <span class="level">{{ 'ranking.level' | transloco }} {{ entry.participant.nivel }}</span>
+            <div class="podium-base" aria-hidden="true"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="ranking-card table-card">
+        <div class="card-heading"><div><h2>{{ 'ranking.title' | transloco }}</h2><p>{{ 'ranking.participants' | transloco:{ count: participants.length } }}</p></div><span class="total-pill">{{ 'ranking.points' | transloco }}</span></div>
+        <div class="table-scroll"><table>
+          <thead><tr><th scope="col">{{ 'ranking.hash' | transloco }}</th><th scope="col">{{ 'ranking.user' | transloco }}</th><th scope="col">{{ 'ranking.level' | transloco }}</th><th scope="col">{{ 'ranking.pointsShort' | transloco }}</th></tr></thead>
+          <tbody><tr *ngFor="let participant of participants" [class.user-row]="participant.posicion === ranking.miPosicion">
+            <td class="rank-number">{{ participant.posicion }}</td><td><span class="participant-name">{{ participant.nombreVisible }}<span *ngIf="participant.posicion === ranking.miPosicion"> {{ 'ranking.you' | transloco }}</span></span></td><td><span class="level-pill">{{ participant.nivel }}</span></td><td class="points-cell">{{ formatPoints(participant.ecoPuntos) }}</td>
+          </tr></tbody>
+        </table></div>
+      </article>
+    </section>
+
+    <section class="ranking-card own-position" aria-live="polite">
+      <h2>{{ 'ranking.yourPosition' | transloco }}</h2>
+      <div class="position-number">{{ ownParticipant ? '#' + ownParticipant.posicion : '#—' }}</div>
+      <p>{{ ownParticipant ? ('ranking.of' | transloco:{ count: participants.length }) : ('ranking.unknownPosition' | transloco) }}</p>
+      <span>{{ positionMessage }}</span>
+      <a routerLink="/retos">{{ 'ranking.challenges' | transloco }}</a>
+    </section>
+
+    <section class="empty-state" *ngIf="participants.length === 0"><span aria-hidden="true">🌱</span><h2>{{ 'ranking.empty' | transloco }}</h2><p>{{ 'ranking.emptyHelp' | transloco }}</p></section>
+    <p class="updated-at" *ngIf="lastUpdatedLabel">{{ 'ranking.lastUpdate' | transloco:{ date: lastUpdatedLabel } }}</p>
+  </ng-container>
+</main>

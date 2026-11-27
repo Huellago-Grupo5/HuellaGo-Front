@@ -8,6 +8,14 @@
 
 # Node
 /node_modules
+.env
+.env.*
+!.env.example
+*.dump
+*.backup
+*.bak
+*.sql.gz
+*.sql.zip
 npm-debug.log
 yarn-error.log
 

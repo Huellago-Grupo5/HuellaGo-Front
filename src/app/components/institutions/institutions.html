@@ -1,0 +1,45 @@
+<main class="institution-page">
+  <header><p class="eyebrow">HuellaGo</p><h1>{{ 'institutions.title' | transloco }}</h1><p>{{ 'institutions.intro' | transloco }}</p></header>
+  <p class="notice error" *ngIf="error" role="alert">{{ error }} <button type="button" (click)="load()">{{ 'institutions.retry' | transloco }}</button></p>
+  <p class="notice success" *ngIf="message" role="status">{{ message }}</p>
+  <p *ngIf="loading">{{ 'institutions.loading' | transloco }}</p>
+  <section class="institution-card">
+    <h2>{{ 'institutions.mine' | transloco }}</h2>
+    <p *ngIf="!loading && !links.length">{{ 'institutions.empty' | transloco }}</p>
+    <label *ngIf="links.length">{{ 'institutions.select' | transloco }}
+      <select [ngModel]="selectedId" (ngModelChange)="select($event)"><option *ngFor="let link of links" [ngValue]="link.id">{{ link.nombre }} · {{ link.rol }}</option></select>
+    </label>
+    <p *ngIf="selected">{{ 'institutions.role' | transloco }}: <strong>{{ selected.rol }}</strong><span *ngIf="selected.grupo"> · {{ selected.grupo }}</span></p>
+  </section>
+  <section class="institution-card" *ngIf="isAdmin">
+    <h2>{{ 'institutions.panel' | transloco }}</h2><p>{{ 'institutions.aggregate' | transloco }}</p>
+    <section class="data-panels"><article class="metric-panel"><h3>{{ 'institutions.dashboard' | transloco }}</h3><p>{{ dashboard?.institucion?.nombre || selected?.nombre }}</p><div class="metrics"><div><strong>{{ dashboard?.resumen?.totalCampanas ?? '—' }}</strong><span>{{ 'institutions.totalCampaigns' | transloco }}</span></div><div><strong>{{ dashboard?.resumen?.activas ?? '—' }}</strong><span>{{ 'institutions.activeCampaigns' | transloco }}</span></div><div><strong>{{ dashboard?.resumen?.usuariosParticipantesUnicos ?? '—' }}</strong><span>{{ 'institutions.participants' | transloco }}</span></div><div><strong>{{ dashboard?.huellaPromedio?.promedioKgCo2eSemanal ?? '—' }}</strong><span>{{ 'institutions.averageFootprint' | transloco }} ({{ dashboard?.huellaPromedio?.unidad || 'kg CO₂e/semana' }})</span></div></div></article>
+      <article class="metric-panel"><h3>{{ 'institutions.ranking' | transloco }}</h3><p *ngIf="ranking?.mensaje">{{ ranking?.mensaje }}</p><p *ngIf="ranking?.miPosicion">{{ 'institutions.position' | transloco }}: {{ ranking?.miPosicion }}</p><table *ngIf="ranking?.participantes?.length"><thead><tr><th>#</th><th>{{ 'institutions.member' | transloco }}</th><th>{{ 'institutions.ecoPoints' | transloco }}</th><th>{{ 'institutions.level' | transloco }}</th></tr></thead><tbody><tr *ngFor="let member of ranking?.participantes"><td>{{ member.posicion }}</td><td>{{ member.nombreVisible }}</td><td>{{ member.ecoPuntos }}</td><td>{{ member.nivel }}</td></tr></tbody></table></article></section>
+    <article class="campaigns"><h3>{{ 'institutions.campaigns' | transloco }}</h3><p *ngIf="!campaigns.length">{{ 'institutions.noCampaigns' | transloco }}</p><article class="campaign-row" *ngFor="let campaign of campaigns"><strong>{{ campaign.nombre }}</strong><span>{{ campaign.objetivo }}</span><small>{{ campaign.fechaInicio }} – {{ campaign.fechaFin }} · {{ campaign.estado }}</small></article></article>
+    <form class="campaign-form" (ngSubmit)="createCampaign()"><h3>{{ 'institutions.createCampaign' | transloco }}</h3>
+      <label>{{ 'institutions.campaignName' | transloco }}<input name="campanaNombre" [(ngModel)]="campaign.nombre" maxlength="255" required></label>
+      <label>{{ 'institutions.campaignGoal' | transloco }}<input name="campanaObjetivo" [(ngModel)]="campaign.objetivo" maxlength="255" required></label>
+      <label>{{ 'institutions.campaignStart' | transloco }}<input name="campanaInicio" type="date" [(ngModel)]="campaign.fechaInicio" required></label>
+      <label>{{ 'institutions.campaignEnd' | transloco }}<input name="campanaFin" type="date" [(ngModel)]="campaign.fechaFin" required></label>
+      <label>{{ 'institutions.campaignTarget' | transloco }}<input name="campanaMeta" type="number" min="0.01" step="0.01" [(ngModel)]="campaign.metaCantidad" required></label>
+      <label>{{ 'institutions.campaignUnit' | transloco }}<input name="campanaUnidad" [(ngModel)]="campaign.unidadMedida" maxlength="60" required></label>
+      <button type="submit" [disabled]="saving">{{ 'institutions.createCampaign' | transloco }}</button>
+    </form>
+    <article class="campaigns"><h3>{{ 'institutions.report' | transloco }}</h3><button type="button" (click)="loadReport()">{{ 'institutions.loadReport' | transloco }}</button><pre *ngIf="report">{{ report | json }}</pre></article>
+    <article class="campaigns"><h3>{{ 'institutions.groups' | transloco }}</h3><div class="campaign-row" *ngFor="let group of groups"><strong>{{ group.nombre }}</strong><span>{{ group.tipo }}</span></div><form class="campaign-form" (ngSubmit)="createGroup()"><h4>{{ 'institutions.createGroup' | transloco }}</h4><label>{{ 'institutions.type' | transloco }}<select name="groupType" [(ngModel)]="group.tipo"><option value="EQUIPO">{{ 'institutions.team' | transloco }}</option><option value="FACULTAD">{{ 'institutions.faculty' | transloco }}</option></select></label><label>{{ 'institutions.groupName' | transloco }}<input name="groupName" [(ngModel)]="group.nombre" maxlength="100" required></label><button type="submit" [disabled]="saving">{{ 'institutions.createGroup' | transloco }}</button></form><button type="button" (click)="createInvite()">{{ 'institutions.createInvite' | transloco }}</button><p *ngIf="invitation"><strong>{{ invitation.codigo }}</strong><small> · {{ 'institutions.expires' | transloco }} {{ invitation.venceEl | date:'medium' }}</small></p></article>
+  </section>
+  <section class="institution-card" *ngIf="!isAdmin">
+    <h2>{{ 'institutions.joinTitle' | transloco }}</h2><p>{{ 'institutions.joinHelp' | transloco }}</p><form (ngSubmit)="redeemInvite()"><label>{{ 'institutions.inviteCode' | transloco }}<input name="inviteCode" [(ngModel)]="invitationCode" maxlength="100" required></label><button type="submit" [disabled]="saving">{{ 'institutions.join' | transloco }}</button></form>
+  </section>
+  <section class="institution-card" *ngIf="!links.length">
+    <h2>{{ 'institutions.registerTitle' | transloco }}</h2><p>{{ 'institutions.registerHelp' | transloco }}</p>
+    <form (ngSubmit)="create()">
+      <label>{{ 'institutions.type' | transloco }}<select name="tipo" [(ngModel)]="draft.tipo"><option value="UNIVERSIDAD">{{ 'institutions.university' | transloco }}</option><option value="EMPRESA">{{ 'institutions.company' | transloco }}</option></select></label>
+      <label>{{ 'institutions.name' | transloco }}<input name="nombre" [(ngModel)]="draft.nombre" maxlength="150" required></label>
+      <label>{{ 'institutions.country' | transloco }}<input name="pais" [(ngModel)]="draft.pais" maxlength="2" required></label>
+      <label>{{ 'institutions.taxId' | transloco }}<input name="identificadorFiscal" [(ngModel)]="draft.identificadorFiscal" maxlength="30" required></label>
+      <label>{{ 'institutions.contact' | transloco }}<input name="correoContacto" type="email" [(ngModel)]="draft.correoContacto" maxlength="254" required></label>
+      <button type="submit" [disabled]="saving">{{ (saving ? 'institutions.registering' : 'institutions.register') | transloco }}</button>
+    </form>
+  </section>
+</main>

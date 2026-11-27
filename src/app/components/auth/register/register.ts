@@ -10,22 +10,7 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { ApiErrorResponse } from '../../../models/api-error-response.model';
 import { AuthService } from '../../../services/auth.service';
-
-function securePassword(control: AbstractControl<string>): ValidationErrors | null {
-  const password = control.value;
-  if (!password) return null;
-
-  if (password.length < 12) return { passwordMinLength: true };
-  if (password.length > 72 || new TextEncoder().encode(password).length > 72) {
-    return { passwordMaxLength: true };
-  }
-  if (/\s/u.test(password)) return { passwordWhitespace: true };
-  if (!/\p{Lu}/u.test(password)) return { passwordUppercase: true };
-  if (!/\p{Ll}/u.test(password)) return { passwordLowercase: true };
-  if (!/\p{Nd}/u.test(password)) return { passwordNumber: true };
-  if (!/[^\p{L}\p{N}]/u.test(password)) return { passwordSymbol: true };
-  return null;
-}
+import { securePassword } from '../../../validators/secure-password.validator';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const password = group.get('contrasena')?.value;

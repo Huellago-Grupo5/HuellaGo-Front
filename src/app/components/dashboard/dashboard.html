@@ -1,0 +1,95 @@
+<main class="dashboard-content">
+  <section class="welcome">
+    <div>
+      <p class="eyebrow">{{ 'dashboard.eyebrow' | transloco }}</p>
+      <h1>{{ 'dashboard.welcome' | transloco }}</h1>
+      <p>{{ 'dashboard.intro' | transloco }}</p>
+    </div>
+    <a class="action-link" routerLink="/mi-huella">{{ 'dashboard.viewFootprint' | transloco }} <span aria-hidden="true">→</span></a>
+  </section>
+
+  <p class="state-message" *ngIf="loading">{{ 'dashboard.loading' | transloco }}</p>
+  <section class="load-error" *ngIf="!loading && errorMessage" role="alert">
+    <p>{{ errorMessage }}</p><button type="button" (click)="retryDashboard()">{{ 'dashboard.retry' | transloco }}</button>
+  </section>
+
+  <ng-container *ngIf="!loading && summary as data">
+    <section class="stats-grid">
+      <article class="card stat-card">
+        <div class="stat-icon green"><img src="assets/images/hojascarlos.png" alt="" /></div>
+        <p class="stat-label">{{ 'dashboard.totalFootprint' | transloco }}</p>
+        <h2 class="stat-value">{{ appearance.format(data.huellaCarbonoActual, 'kg CO₂e') }}</h2>
+        <div class="badge">{{ history[0]?.nivelImpacto || ('dashboard.registered' | transloco) }}</div>
+        <p class="stat-footer">{{ 'dashboard.weekly' | transloco }}</p>
+      </article>
+      <article class="card stat-card">
+        <div class="stat-icon yellow"><img src="assets/images/ecopuntoscarlos.png" alt="" /></div>
+        <p class="stat-label">{{ 'dashboard.ecoPoints' | transloco }}</p><h2 class="stat-value">{{ data.ecoPuntos ?? 0 }}</h2>
+        <p class="stat-footer">{{ 'dashboard.level' | transloco:{ level: data.nivel ?? '—' } }}</p>
+      </article>
+      <article class="card stat-card">
+        <div class="stat-icon blue"><img src="assets/images/impactodiariocarlos.png" alt="" /></div>
+        <p class="stat-label">{{ 'dashboard.dailyImpact' | transloco }}</p>
+        <h2 class="stat-value">{{ daily ? appearance.format(daily.co2Total, daily.unidad || 'kg CO₂e') : '—' }}</h2>
+        <p class="stat-footer">{{ daily?.periodo || ('dashboard.dailyAverage' | transloco) }}</p>
+      </article>
+    </section>
+
+    <p class="details-loading" *ngIf="detailsLoading">{{ 'dashboard.loadingDetails' | transloco }}</p>
+    <p class="details-notice" *ngIf="!detailsLoading && detailsMessage">{{ detailsMessage }}</p>
+
+    <section class="middle-grid">
+      <article class="card activity-card">
+        <div class="section-title"><div><p class="eyebrow">{{ 'dashboard.profile' | transloco }}</p><h2>{{ 'dashboard.topActivities' | transloco }}</h2></div></div>
+        <ul class="activity-list" *ngIf="activities.length; else noBreakdown">
+          <li *ngFor="let activity of activities">
+            <div class="activity-info"><div class="activity-icon"><img [src]="activityIcon(activity.categoria)" alt="" /></div><span>{{ activity.categoria }}</span></div>
+            <div class="activity-bar"><div class="activity-track"><div class="activity-fill" [style.width.%]="activityPercent(activity)"></div></div>
+              <span class="activity-value">{{ appearance.format(activity.co2, 'kg') }} · {{ activityPercent(activity) | number:'1.0-0' }}%</span>
+            </div>
+          </li>
+        </ul>
+        <ng-template #noBreakdown><p class="empty-state">{{ 'dashboard.noBreakdown' | transloco }}</p></ng-template>
+      </article>
+
+      <article class="card history-card">
+        <div class="section-title"><div><p class="eyebrow">{{ 'dashboard.savedMeasurements' | transloco }}</p><h2>{{ 'dashboard.evolution' | transloco }}</h2></div>
+          <span class="history-count" *ngIf="history.length">{{ 'dashboard.records' | transloco:{ count: history.length } }}</span>
+        </div>
+        <div class="chart" *ngIf="historyLine.length; else noHistory">
+          <svg class="history-chart" viewBox="0 0 100 100" role="img" [attr.aria-label]="'dashboard.evolution' | transloco">
+            <line x1="5" y1="91" x2="95" y2="91" class="chart-axis"></line>
+            <line x1="5" y1="53" x2="95" y2="53" class="chart-gridline"></line>
+            <line x1="5" y1="15" x2="95" y2="15" class="chart-gridline"></line>
+            <polyline [attr.points]="historyLinePoints" class="chart-line"></polyline>
+            <circle *ngFor="let point of historyLine" [attr.cx]="point.x" [attr.cy]="point.y" r="2.5" class="chart-point"><title>{{ appearance.format(point.entry.co2Total, point.entry.unidad || 'kg CO₂e') }} · {{ point.entry.fechaCalculo | date:'mediumDate' }}</title></circle>
+          </svg>
+          <div class="chart-labels"><span *ngFor="let point of historyLine">{{ point.entry.fechaCalculo | date:'MMM d' }}</span></div>
+          <p class="chart-caption">{{ 'dashboard.chartHelp' | transloco }}</p>
+        </div>
+        <ng-template #noHistory><p class="empty-state">{{ 'dashboard.noHistory' | transloco }}</p></ng-template>
+        <a class="text-link" routerLink="/mi-huella">{{ 'dashboard.fullHistory' | transloco }}</a>
+      </article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="card equivalence-card">
+        <div class="section-title"><div><p class="eyebrow">{{ 'dashboard.references' | transloco }}</p><h2>{{ 'dashboard.equivalences' | transloco }}</h2></div></div>
+        <div class="equivalences" *ngIf="equivalences; else noEquivalences">
+          <div class="equivalence-item"><div class="equivalence-icon green"><img src="assets/images/arbolimagen.png" alt="" /></div><strong>{{ equivalences.arboles }}</strong><span>{{ 'dashboard.trees' | transloco }}</span></div>
+          <div class="equivalence-item"><div class="equivalence-icon blue"><img src="assets/images/bike.png" alt="" /></div><strong>{{ equivalences.bicicletaKm }}</strong><span>{{ 'dashboard.bike' | transloco }}</span></div>
+          <div class="equivalence-item"><div class="equivalence-icon cyan"><img src="assets/images/Residuosimagen.png" alt="" /></div><strong>{{ equivalences.reciclajeKg }}</strong><span>{{ 'dashboard.recycling' | transloco }}</span></div>
+        </div>
+        <ng-template #noEquivalences><p class="empty-state">{{ 'dashboard.noEquivalences' | transloco }}</p></ng-template>
+        <p class="disclaimer" *ngIf="equivalences">{{ equivalences.advertencia }}</p>
+      </article>
+      <article class="card retos-card">
+        <div class="section-title"><div><p class="eyebrow">{{ 'dashboard.keepGoing' | transloco }}</p><h2>{{ 'dashboard.activeChallenges' | transloco }}</h2></div><span class="badge">{{ data.retosActivos }}</span></div>
+        <p>{{ 'dashboard.challengeSummary' | transloco:{ active: data.retosActivos, completed: data.retosCompletados } }}</p>
+        <p class="recommendation-count">{{ data.recomendacionesPendientes }} {{ 'dashboard.pendingRecommendations' | transloco }}</p>
+      </article>
+    </section>
+
+    <section class="report-row"><p>{{ reportMessage }}</p><button class="report-button" type="button" (click)="downloadReport()" [disabled]="reportLoading">{{ (reportLoading ? 'dashboard.preparing' : 'dashboard.download') | transloco }}</button></section>
+  </ng-container>
+</main>

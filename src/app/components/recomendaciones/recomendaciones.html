@@ -1,0 +1,91 @@
+<main class="recommendations-page">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">{{ 'nav.workspace' | transloco }}</p>
+      <h1>{{ 'recommendations.title' | transloco }}</h1>
+      <p class="hero-copy">{{ 'recommendations.intro' | transloco }}</p>
+      <p class="method-note">{{ 'recommendations.localInfo' | transloco }}</p>
+    </div>
+    <button class="refresh-button" type="button" (click)="refreshRecommendations()" [disabled]="refreshing || loading">
+      <span aria-hidden="true">↻</span> {{ (refreshing ? 'recommendations.refreshing' : 'recommendations.refresh') | transloco }}
+    </button>
+  </section>
+
+  <section class="priority-banner" *ngIf="priorityRecommendation as priority">
+    <span class="priority-icon" aria-hidden="true">⚡</span>
+    <div class="priority-copy"><strong>{{ 'recommendations.priority' | transloco }}</strong><p>{{ priority.titulo }}</p></div>
+    <button class="banner-button" type="button" (click)="openDetails(priority)">{{ 'recommendations.detail' | transloco }}</button>
+  </section>
+
+  <div class="notice success" role="status" *ngIf="notice">{{ notice }}</div>
+  <section class="generation-details" *ngIf="generationDetails && (generationDetails.datosFaltantes.length || generationDetails.advertencias.length)">
+    <div *ngIf="generationDetails.datosFaltantes.length"><strong>{{ 'recommendations.missing' | transloco }}</strong><ul><li *ngFor="let field of generationDetails.datosFaltantes">{{ field }}</li></ul></div>
+    <div *ngIf="generationDetails.advertencias.length"><strong>{{ 'recommendations.revision' | transloco }}</strong><ul><li *ngFor="let warning of generationDetails.advertencias">{{ warning }}</li></ul></div>
+  </section>
+  <div class="notice error" role="alert" *ngIf="error">
+    <span>{{ error }}</span><button *ngIf="retryAction" type="button" (click)="retry()" [disabled]="loading || refreshing">{{ (retryAction === 'generation' ? 'recommendations.retryGeneration' : 'recommendations.retryLoad') | transloco }}</button>
+  </div>
+
+  <section class="tabs" [attr.aria-label]="'recommendations.title' | transloco">
+    <button type="button" [class.active]="tab === 'pendientes'" (click)="setTab('pendientes')">{{ 'recommendations.pending' | transloco }} <span>{{ recomendaciones.length }}</span></button>
+    <button type="button" [class.active]="tab === 'historial'" (click)="setTab('historial')">{{ 'recommendations.history' | transloco }} <span>{{ historialItems.length }}</span></button>
+  </section>
+
+  <section class="toolbar">
+    <label class="search-box"><span aria-hidden="true">⌕</span><input type="search" [(ngModel)]="search" [placeholder]="'recommendations.search' | transloco" [attr.aria-label]="'recommendations.search' | transloco" /></label>
+    <label class="category-select" *ngIf="tab === 'pendientes'">
+      <span>{{ 'recommendations.category' | transloco }}</span>
+      <select [(ngModel)]="categoryFilter" [attr.aria-label]="'recommendations.category' | transloco">
+        <option value="">{{ 'recommendations.all' | transloco }}</option>
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
+    </label>
+  </section>
+
+  <section class="loading-state" *ngIf="loading" role="status"><span class="spinner"></span><p>{{ 'recommendations.loading' | transloco }}</p></section>
+
+  <ng-container *ngIf="!loading && tab === 'pendientes'">
+    <section class="empty-state" *ngIf="visibleRecommendations.length === 0">
+      <span class="empty-icon" aria-hidden="true">🌿</span>
+      <h2>{{ (recomendaciones.length === 0 ? 'recommendations.empty' : 'recommendations.noMatches') | transloco }}</h2>
+      <p *ngIf="recomendaciones.length === 0">{{ 'recommendations.updateHabits' | transloco }} <a routerLink="/mi-huella">{{ 'nav.footprint' | transloco }}</a>. {{ 'recommendations.after' | transloco }}</p>
+      <p *ngIf="recomendaciones.length > 0">{{ 'recommendations.searchHelp' | transloco }}</p>
+      <button *ngIf="recomendaciones.length === 0" type="button" class="refresh-button" (click)="refreshRecommendations()" [disabled]="refreshing">{{ (refreshing ? 'recommendations.refreshing' : 'recommendations.review') | transloco }}</button>
+    </section>
+
+    <section class="recommendation-grid" *ngIf="visibleRecommendations.length > 0">
+      <article class="recommendation-card" *ngFor="let item of visibleRecommendations">
+        <div class="card-topline"><span class="category-chip" [ngClass]="categoryClass(item.categoria)">{{ item.categoria }}</span><span class="priority" [ngClass]="'priority-' + (item.prioridad || 'sin-dato').toLowerCase()">{{ item.prioridad || ('recommendations.noPriority' | transloco) }}</span></div>
+        <h2>{{ item.titulo }}</h2>
+        <p class="description">{{ item.descripcion }}</p>
+        <p class="reason" *ngIf="item.motivo"><strong>{{ 'recommendations.reason' | transloco }}</strong> {{ item.motivo }}</p>
+        <p class="current-emissions" *ngIf="item.co2Categoria !== null && item.co2Categoria !== undefined">{{ 'recommendations.currentCategory' | transloco:{ category: item.categoria } }} <strong>{{ item.co2Categoria | number:'1.0-2' }} kg CO₂e/semana</strong></p>
+        <p class="impact-note" *ngIf="item.impactoEsperado === 'NO_ESTIMABLE'">{{ 'recommendations.impactUnknown' | transloco }}</p>
+        <div class="card-actions"><button type="button" class="text-button" (click)="openDetails(item)">{{ 'recommendations.explain' | transloco }}</button><button type="button" class="text-button" (click)="complete(item)" [disabled]="actionId !== null">{{ (actionId === item.usuarioRecomendacionId ? 'recommendations.saving' : 'recommendations.markDone') | transloco }}</button><button type="button" class="primary-button" (click)="convertToChallenge(item)" [disabled]="actionId !== null">{{ 'recommendations.convert' | transloco }}</button></div>
+      </article>
+    </section>
+  </ng-container>
+
+  <ng-container *ngIf="!loading && tab === 'historial'">
+    <section class="empty-state" *ngIf="visibleHistory.length === 0"><span class="empty-icon" aria-hidden="true">✓</span><h2>{{ 'recommendations.noHistory' | transloco }}</h2><p>{{ 'recommendations.historyHelp' | transloco }}</p></section>
+    <section class="recommendation-grid" *ngIf="visibleHistory.length > 0">
+      <article class="recommendation-card history-card" *ngFor="let item of visibleHistory">
+        <div class="card-topline"><span class="category-chip">{{ 'recommendations.recommendation' | transloco }}</span><span class="history-badge">{{ 'recommendations.done' | transloco }}</span></div>
+        <h2>{{ item.titulo }}</h2><p class="description">{{ item.descripcion }}</p>
+        <p class="history-date">{{ 'recommendations.completedAt' | transloco:{ date: formatDate(item.fechaCompletado) } }}</p>
+      </article>
+    </section>
+  </ng-container>
+
+  <div class="modal-backdrop" *ngIf="selected as item" (click)="closeDetails()" (keydown.escape)="closeDetails()">
+    <section class="detail-modal" role="dialog" aria-modal="true" [attr.aria-label]="item.titulo" (click)="$event.stopPropagation()">
+      <div class="modal-heading"><span class="category-chip" [ngClass]="categoryClass(item.categoria)">{{ item.categoria }}</span><button type="button" class="close-button" [attr.aria-label]="'common.close' | transloco" (click)="closeDetails()">×</button></div>
+      <span class="priority-label">{{ 'recommendations.priority' | transloco }} {{ item.prioridad || ('recommendations.unavailable' | transloco) }}</span><h2>{{ item.titulo }}</h2><p>{{ item.descripcion }}</p>
+      <div class="explanation" *ngIf="item.motivo"><strong>{{ 'recommendations.why' | transloco }}</strong><p>{{ item.motivo }}</p></div>
+      <div class="explanation" *ngIf="item.justificacionPrioridad"><strong>{{ 'recommendations.priorityHow' | transloco }}</strong><p>{{ item.justificacionPrioridad }}</p></div>
+      <div class="explanation" *ngIf="item.explicacionImpacto"><strong>{{ 'recommendations.impactEstimate' | transloco }}</strong><p>{{ item.explicacionImpacto }}</p></div>
+      <p class="modal-emissions" *ngIf="item.co2Categoria !== null && item.co2Categoria !== undefined">{{ 'recommendations.currentEmissions' | transloco:{ value: item.co2Categoria | number:'1.0-2' } }}</p>
+      <div class="modal-actions"><button type="button" class="text-button" (click)="complete(item)" [disabled]="actionId !== null">{{ 'recommendations.markDone' | transloco }}</button><button type="button" class="primary-button" (click)="convertToChallenge(item)" [disabled]="actionId !== null">{{ 'recommendations.convert' | transloco }}</button></div>
+    </section>
+  </div>
+</main>

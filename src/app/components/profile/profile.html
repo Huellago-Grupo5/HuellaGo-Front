@@ -1,0 +1,60 @@
+<main class="profile-page">
+  <header class="page-heading">
+    <div><p class="eyebrow">{{ 'profile.eyebrow' | transloco }}</p><h1>{{ 'profile.title' | transloco }}</h1><p class="intro">{{ 'profile.intro' | transloco }}</p></div>
+    <span class="leaf-mark" aria-hidden="true">🌿</span>
+  </header>
+
+  <div class="notice error" role="alert" *ngIf="error">{{ error.startsWith('profile.') ? (error | transloco) : error }}</div>
+  <div class="notice success" role="status" *ngIf="message">{{ message | transloco }}</div>
+  <div class="loading" *ngIf="loading">{{ 'profile.loading' | transloco }}</div>
+  <section class="error-card" *ngIf="!loading && error && !profile"><p>{{ error }}</p><button type="button" class="primary" (click)="load()">{{ 'profile.retry' | transloco }}</button></section>
+
+  <ng-container *ngIf="!loading && profile">
+    <section class="profile-card" *ngIf="view === 'summary'">
+      <div class="avatar">{{ profile.nombres.charAt(0).toUpperCase() }}</div>
+      <h2>{{ profile.nombres }} {{ profile.apellidos }}</h2>
+      <p class="email">{{ profile.correo }}</p>
+      <div class="stats">
+        <article><strong>{{ profile.ecoPuntos ?? dashboard?.ecoPuntos ?? 0 }}</strong><span>{{ 'profile.ecoPoints' | transloco }}</span></article>
+        <article><strong>{{ dashboard?.huellaCarbonoActual ?? '—' }}<small *ngIf="dashboard?.huellaCarbonoActual != null"> kg CO₂e</small></strong><span>{{ 'profile.currentFootprint' | transloco }}</span></article>
+      </div>
+      <div class="profile-actions">
+        <button type="button" class="menu-row" (click)="edit()"><span><b>{{ 'profile.edit' | transloco }}</b><small>{{ 'profile.editHelp' | transloco }}</small></span><span class="chevron">›</span></button>
+        <button type="button" class="menu-row" (click)="view = 'password'; error = ''; message = ''"><span><b>{{ 'profile.changePassword' | transloco }}</b><small>{{ 'profile.changePasswordHelp' | transloco }}</small></span><span class="chevron">›</span></button>
+        <a class="menu-row" routerLink="/insignias"><span><b>{{ 'profile.badges' | transloco }}</b><small>{{ 'profile.badgesHelp' | transloco }}</small></span><span class="chevron">›</span></a>
+        <a class="menu-row" routerLink="/mi-huella"><span><b>{{ 'profile.history' | transloco }}</b><small>{{ 'profile.historyHelp' | transloco }}</small></span><span class="chevron">›</span></a>
+        <label class="menu-row preference-row"><span><b>{{ 'profile.notifications' | transloco }}</b><small>{{ 'profile.notificationHelp' | transloco }}</small></span><input type="checkbox" [checked]="profile.notificacionesActivas" [disabled]="preferenceSaving" (change)="toggleNotifications($any($event.target).checked)"></label>
+        <label class="menu-row preference-row"><span><b>{{ 'profile.communityVisibility' | transloco }}</b><small>{{ 'profile.communityVisibilityHelp' | transloco }}</small></span><input type="checkbox" [checked]="profile.visibilidadComunidad" [disabled]="privacySaving" (change)="toggleCommunityVisibility($any($event.target).checked)"></label>
+        <div class="menu-row settings-row"><span><b>{{ 'profile.theme' | transloco }}</b><small>{{ 'profile.themeHelp' | transloco }}</small></span><select [(ngModel)]="visualPreferences.tema" [ngModelOptions]="{standalone: true}" [disabled]="visualSaving" (change)="updateVisualPreferences()"><option value="claro">{{ 'profile.light' | transloco }}</option><option value="oscuro">{{ 'profile.dark' | transloco }}</option></select></div>
+        <div class="menu-row settings-row"><span><b>{{ 'profile.units' | transloco }}</b><small>{{ 'profile.unitsHelp' | transloco }}</small></span><select [(ngModel)]="visualPreferences.unidades" [ngModelOptions]="{standalone: true}" [disabled]="visualSaving" (change)="updateVisualPreferences()"><option value="metric">{{ 'profile.metric' | transloco }}</option><option value="imperial">{{ 'profile.imperial' | transloco }}</option></select></div>
+      </div>
+    </section>
+
+    <section class="form-card" *ngIf="view === 'edit'">
+      <button type="button" class="back" (click)="back()">‹ {{ 'profile.back' | transloco }}</button>
+      <h2>{{ 'profile.edit' | transloco }}</h2>
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+        <label>{{ 'profile.name' | transloco }}<input type="text" formControlName="nombres" autocomplete="given-name"></label>
+        <small class="field-error" *ngIf="profileForm.controls.nombres.touched && profileForm.controls.nombres.invalid">{{ 'profile.validName' | transloco }}</small>
+        <label>{{ 'profile.surname' | transloco }}<input type="text" formControlName="apellidos" autocomplete="family-name"></label>
+        <small class="field-error" *ngIf="profileForm.controls.apellidos.touched && profileForm.controls.apellidos.invalid">{{ 'profile.validSurname' | transloco }}</small>
+        <label>{{ 'profile.email' | transloco }}<input type="email" formControlName="correo" autocomplete="email"></label>
+        <small class="hint">{{ 'profile.emailChange' | transloco }}</small>
+        <button class="primary" type="submit" [disabled]="saving">{{ (saving ? 'profile.saving' : 'profile.save') | transloco }}</button>
+      </form>
+    </section>
+
+    <section class="form-card" *ngIf="view === 'password'">
+      <button type="button" class="back" (click)="back()">‹ {{ 'profile.back' | transloco }}</button>
+      <h2>{{ 'profile.passwordTitle' | transloco }}</h2>
+      <p class="hint">{{ 'profile.passwordRules' | transloco }}</p>
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+        <label>{{ 'profile.currentPassword' | transloco }}<input type="password" formControlName="contrasenaActual" autocomplete="current-password"></label>
+        <label>{{ 'profile.newPassword' | transloco }}<input type="password" formControlName="contrasenaNueva" autocomplete="new-password"></label>
+        <small class="field-error" *ngIf="passwordForm.controls.contrasenaNueva.touched && passwordForm.controls.contrasenaNueva.invalid">{{ 'profile.passwordRuleError' | transloco }}</small>
+        <label>{{ 'profile.confirm' | transloco }}<input type="password" formControlName="confirmar" autocomplete="new-password"></label>
+        <button class="primary" type="submit" [disabled]="saving">{{ (saving ? 'profile.updating' : 'profile.updatePassword') | transloco }}</button>
+      </form>
+    </section>
+  </ng-container>
+</main>

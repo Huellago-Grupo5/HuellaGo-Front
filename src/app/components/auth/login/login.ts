@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { finalize } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize, switchMap } from 'rxjs';
 import { ApiErrorResponse } from '../../../models/api-error-response.model';
 import { AuthService } from '../../../services/auth.service';
+import { OnboardingService } from '../../../services/onboarding.service';
 
 @Component({
   selector: 'app-login',
@@ -30,11 +31,19 @@ export class Login implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
+    private readonly onboardingService: OnboardingService,
+    private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
     if (this.route.snapshot.queryParamMap.get('registrado') === '1') {
       this.successMessage = 'Tu cuenta se creó correctamente. Ya puedes iniciar sesión.';
+    }
+    if (this.route.snapshot.queryParamMap.get('revisarSesion') === '1') {
+      this.errorMessage = 'No se pudo verificar tu progreso. Inicia sesión otra vez cuando el backend esté disponible.';
+    }
+    if (this.route.snapshot.queryParamMap.get('correoActualizado') === '1') {
+      this.successMessage = 'Tu correo se actualizó. Inicia sesión con tu nuevo correo.';
     }
   }
 
@@ -49,10 +58,11 @@ export class Login implements OnInit {
     this.loading = true;
     this.authService
       .login(this.form.getRawValue())
+      .pipe(switchMap(() => this.onboardingService.getInitialState()))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: (response) => {
-          this.successMessage = `Sesión iniciada correctamente para ${response.correo}.`;
+        next: (state) => {
+          void this.router.navigate([state.complete ? '/dashboard' : '/onboarding']);
         },
         error: (error: unknown) => {
           this.errorMessage = this.getErrorMessage(error, 'No se pudo iniciar sesión.');

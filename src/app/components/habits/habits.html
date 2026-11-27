@@ -1,0 +1,26 @@
+<main class="section-page">
+  <section class="section-heading"><div><p class="eyebrow">{{ 'habits.eyebrow' | transloco }}</p><h1>{{ 'habits.title' | transloco }}</h1><p>{{ 'habits.intro' | transloco }}</p></div><a class="back-link" routerLink="/mi-huella">{{ 'habits.back' | transloco }}</a></section>
+  <p class="state" *ngIf="loading">{{ 'habits.loading' | transloco }}</p>
+  <div class="notice error" *ngIf="errorMessage" role="alert"><span>{{ errorMessage }}</span><button *ngIf="!loaded" type="button" (click)="retryLoad()">{{ 'habits.retry' | transloco }}</button></div>
+  <section class="saved-card" *ngIf="!loading && saved" role="status"><div class="saved-icon">✓</div><p class="eyebrow">{{ 'habits.saved' | transloco }}</p><h2>{{ 'habits.savedHelp' | transloco }}</h2><p>{{ successMessage }}</p><a class="primary-button" routerLink="/mi-huella">{{ 'habits.return' | transloco }}</a></section>
+  <form *ngIf="!loading && loaded && !saved" [formGroup]="form" (ngSubmit)="save()" class="habits-form">
+    <section class="form-card"><div class="form-heading"><span class="form-icon transport">↗</span><div><h2>{{ 'habits.transport' | transloco }}</h2><p>{{ 'habits.transportIntro' | transloco }}</p></div></div><div class="fields-grid">
+      <label>{{ 'habits.main' | transloco }}<select formControlName="medio"><option value="Bicicleta">{{ 'habits.bike' | transloco }}</option><option value="Caminando">{{ 'habits.walking' | transloco }}</option><option value="Bus">{{ 'habits.bus' | transloco }}</option><option value="Auto">{{ 'habits.car' | transloco }}</option><option value="Moto">{{ 'habits.moto' | transloco }}</option></select></label>
+      <label>{{ 'habits.km' | transloco }} ({{ appearance.displayUnit('km/semana') }})<input type="number" min="0.01" step="0.1" formControlName="kmSemana" /></label>
+      <label>{{ 'habits.days' | transloco }}<select formControlName="diasSemana"><option *ngFor="let day of [1,2,3,4,5,6,7]" [ngValue]="day">{{ 'habits.daysUnit' | transloco:{ day: day } }}</option></select></label>
+    </div><p class="field-help" *ngIf="form.controls.kmSemana.touched && form.controls.kmSemana.invalid">{{ 'habits.kmError' | transloco }}</p></section>
+    <section class="form-card"><div class="form-heading"><span class="form-icon energy">⚡</span><div><h2>{{ 'habits.energy' | transloco }}</h2><p>{{ 'habits.energyIntro' | transloco }}</p></div></div><div class="fields-grid">
+      <label>{{ 'habits.house' | transloco }}<select formControlName="vivienda"><option value="Casa">{{ 'habits.home' | transloco }}</option><option value="Departamento">{{ 'onboarding.apartment' | transloco }}</option></select></label>
+      <label>{{ 'habits.people' | transloco }}<input type="number" min="1" step="1" formControlName="personas" /></label>
+      <label>{{ 'habits.source' | transloco }}<select formControlName="fuente"><option value="Electricidad">{{ 'habits.electricity' | transloco }}</option><option value="Gas">{{ 'habits.gas' | transloco }}</option><option value="Solar">{{ 'habits.solar' | transloco }}</option></select></label>
+    </div><p class="field-help" *ngIf="form.controls.personas.touched && form.controls.personas.invalid">{{ 'habits.peopleError' | transloco }}</p></section>
+    <section class="form-card"><div class="form-heading"><span class="form-icon food">♡</span><div><h2>{{ 'habits.food' | transloco }}</h2><p>{{ 'habits.foodIntro' | transloco }}</p></div></div><div class="fields-grid single-field">
+      <label>{{ 'habits.foodType' | transloco }}<select formControlName="tipo"><option value="Vegana">{{ 'habits.vegan' | transloco }}</option><option value="Vegetariana">{{ 'habits.vegetarian' | transloco }}</option><option value="Mixta">{{ 'habits.mixed' | transloco }}</option></select></label>
+    </div></section>
+    <section class="form-card"><div class="form-heading"><span class="form-icon waste">♻</span><div><h2>{{ 'habits.waste' | transloco }}</h2><p>{{ 'habits.wasteIntro' | transloco }}</p></div></div><div class="fields-grid">
+      <label>{{ 'habits.plastic' | transloco }}<select formControlName="plasticos"><option value="Bajo">{{ 'habits.low' | transloco }}</option><option value="Medio">{{ 'habits.medium' | transloco }}</option><option value="Alto">{{ 'habits.high' | transloco }}</option></select></label>
+      <label>{{ 'habits.recycling' | transloco }}<select formControlName="reciclas"><option [ngValue]="true">{{ 'habits.recycleYes' | transloco }}</option><option [ngValue]="false">{{ 'habits.recycleNo' | transloco }}</option></select></label>
+    </div></section>
+    <div class="form-actions"><a class="cancel-link" routerLink="/mi-huella">{{ 'habits.cancel' | transloco }}</a><button class="primary-button" type="submit" [disabled]="saving">{{ (saving ? 'habits.saving' : 'habits.save') | transloco }}</button></div>
+  </form>
+</main>

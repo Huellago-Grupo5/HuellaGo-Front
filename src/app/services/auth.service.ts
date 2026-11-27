@@ -36,4 +36,12 @@ export class AuthService {
       request,
     );
   }
+
+  logout(): Observable<{ mensaje: string }> {
+    return this.http.post<{ mensaje: string }>(`${this.apiUrl}/auth/logout`, null);
+  }
+
+  resetPassword(token: string, nuevaContrasena: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/auth/restablecer-contrasena`, { token, nuevaContrasena });
+  }
 }

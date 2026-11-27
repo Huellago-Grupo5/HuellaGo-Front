@@ -2,79 +2,79 @@
   <div class="auth-container">
     <section class="auth-card" aria-labelledby="register-title">
       <div class="auth-form">
-        <a routerLink="/login" class="back-btn" aria-label="Volver a iniciar sesión">
+        <a routerLink="/login" class="back-btn" [attr.aria-label]="'common.backToLogin' | transloco">
           <img src="assets/images/Flecha.png" alt="" />
         </a>
 
-        <h1 id="register-title">Crear cuenta</h1>
-        <p class="auth-intro">Únete a HuellaGo y comienza a reducir tu huella ambiental.</p>
+        <h1 id="register-title">{{ 'auth.registerTitle' | transloco }}</h1>
+        <p class="auth-intro">{{ 'auth.registerIntro' | transloco }}</p>
 
         <form class="auth-fields" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-          <label class="visually-hidden" for="register-names">Nombres</label>
+          <label class="visually-hidden" for="register-names">{{ 'auth.names' | transloco }}</label>
           <input
             id="register-names"
             type="text"
             formControlName="nombres"
-            placeholder="Nombres"
+            [placeholder]="'auth.names' | transloco"
             autocomplete="given-name"
             [attr.aria-invalid]="form.controls.nombres.invalid && form.controls.nombres.touched"
             aria-describedby="register-names-error"
           />
           <span class="field-error" id="register-names-error" *ngIf="form.controls.nombres.touched && form.controls.nombres.invalid">
-            Ingresa nombres de 2 a 80 caracteres; usa letras, espacios, punto, apóstrofo o guion.
+            {{ 'auth.nameValidation' | transloco }}
           </span>
 
-          <label class="visually-hidden" for="register-surnames">Apellidos</label>
+          <label class="visually-hidden" for="register-surnames">{{ 'auth.surnames' | transloco }}</label>
           <input
             id="register-surnames"
             type="text"
             formControlName="apellidos"
-            placeholder="Apellidos"
+            [placeholder]="'auth.surnames' | transloco"
             autocomplete="family-name"
             [attr.aria-invalid]="form.controls.apellidos.invalid && form.controls.apellidos.touched"
             aria-describedby="register-surnames-error"
           />
           <span class="field-error" id="register-surnames-error" *ngIf="form.controls.apellidos.touched && form.controls.apellidos.invalid">
-            Ingresa apellidos de 2 a 80 caracteres; usa letras, espacios, punto, apóstrofo o guion.
+            {{ 'auth.surnameValidation' | transloco }}
           </span>
 
-          <label class="visually-hidden" for="register-email">Correo electrónico</label>
+          <label class="visually-hidden" for="register-email">{{ 'auth.email' | transloco }}</label>
           <input
             id="register-email"
             type="email"
             formControlName="correo"
-            placeholder="Correo electrónico"
+            [placeholder]="'auth.email' | transloco"
             autocomplete="email"
             [attr.aria-invalid]="form.controls.correo.invalid && form.controls.correo.touched"
             aria-describedby="register-email-error"
           />
           <span class="field-error" id="register-email-error" *ngIf="form.controls.correo.touched && form.controls.correo.invalid">
-            Ingresa un correo válido de hasta 120 caracteres.
+            {{ 'auth.emailValidation' | transloco }}
           </span>
 
-          <label class="visually-hidden" for="register-password">Contraseña</label>
+          <label class="visually-hidden" for="register-password">{{ 'auth.password' | transloco }}</label>
           <input
             id="register-password"
             type="password"
             formControlName="contrasena"
-            placeholder="Contraseña"
+            [placeholder]="'auth.password' | transloco"
             autocomplete="new-password"
             [attr.aria-invalid]="form.controls.contrasena.invalid && form.controls.contrasena.touched"
             aria-describedby="register-password-hint register-password-error"
           />
           <small class="password-hint" id="register-password-hint">
-            12–72 caracteres, con mayúscula, minúscula, número y símbolo; sin espacios.
+            {{ 'auth.passwordHint' | transloco }}
           </small>
           <span class="field-error" id="register-password-error" *ngIf="form.controls.contrasena.touched && form.controls.contrasena.invalid">
-            La contraseña no cumple los requisitos indicados.
+            {{ 'auth.passwordInvalid' | transloco }}
           </span>
 
-          <label class="visually-hidden" for="register-confirm-password">Confirmar contraseña</label>
+          <label class="visually-hidden" for="register-confirm-password">{{ 'auth.confirmPassword' | transloco }}</label>
           <input
             id="register-confirm-password"
             type="password"
             formControlName="confirmarContrasena"
-            placeholder="Confirmar contraseña"
+            [placeholder]="'auth.confirmPassword' | transloco"
             autocomplete="new-password"
             [attr.aria-invalid]="form.controls.confirmarContrasena.touched && (form.controls.confirmarContrasena.invalid || form.errors?.['passwordsMismatch'])"
             aria-describedby="register-confirm-error"
@@ -83,35 +83,31 @@
             class="field-error"
             id="register-confirm-error"
             *ngIf="form.controls.confirmarContrasena.touched && (form.controls.confirmarContrasena.invalid || form.errors?.['passwordsMismatch'])"
-          >Las contraseñas deben coincidir.</span>
+          >{{ 'auth.passwordMismatch' | transloco }}</span>
 
           <label class="terms-row">
             <input type="checkbox" formControlName="aceptaTerminos" />
-            <span>Acepto los términos y condiciones de HuellaGo.</span>
+            <span>{{ 'auth.terms' | transloco }}</span>
           </label>
           <span class="field-error" *ngIf="form.controls.aceptaTerminos.touched && form.controls.aceptaTerminos.invalid">
-            Debes aceptar los términos y condiciones.
+            {{ 'auth.termsRequired' | transloco }}
           </span>
 
           <button class="btn-primary" type="submit" [disabled]="loading">
-            {{ loading ? 'Creando cuenta…' : 'Crear cuenta' }}
+            {{ (loading ? 'auth.creating' : 'auth.create') | transloco }}
           </button>
         </form>
 
         <p class="auth-notice error" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-        <div class="divider"><span>o</span></div>
-        <button class="btn-google" type="button" disabled>Continuar con Google</button>
-        <button class="btn-microsoft" type="button" disabled>Continuar con Microsoft</button>
-
         <p class="bottom-link">
-          ¿Ya tienes cuenta?
-          <a routerLink="/login">Iniciar Sesión</a>
+          {{ 'auth.hasAccount' | transloco }}
+          <a routerLink="/login">{{ 'auth.login' | transloco }}</a>
         </p>
       </div>
 
       <div class="auth-image">
-        <img src="assets/images/Planeta.png" alt="Ilustración del planeta HuellaGo" />
+        <img src="assets/images/Planeta.png" alt="" />
       </div>
     </section>
   </div>

@@ -1,0 +1,50 @@
+<div class="app-frame">
+  <button class="sidebar-overlay" [class.active]="menuOpen" type="button" [attr.aria-label]="'nav.closeNavigation' | transloco" (click)="closeMenu()"></button>
+  <aside class="sidebar" [class.open]="menuOpen">
+    <a class="brand" routerLink="/dashboard" (click)="closeMenu()"><img src="assets/images/Logo.png" alt="" /><span>HuellaGo</span></a>
+    <nav class="side-nav" [attr.aria-label]="'nav.primaryNavigation' | transloco">
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()"><img src="assets/icons/home.png" alt="" /><span>{{ 'nav.home' | transloco }}</span></a>
+      <a routerLink="/mi-huella" routerLinkActive="active" (click)="closeMenu()"><img src="assets/icons/huella.png" alt="" /><span>{{ 'nav.footprint' | transloco }}</span></a>
+      <a routerLink="/retos" routerLinkActive="active" (click)="closeMenu()"><img src="assets/icons/retos.png" alt="" /><span>{{ 'nav.challenges' | transloco }}</span></a>
+      <a routerLink="/recomendaciones" routerLinkActive="active" (click)="closeMenu()"><img src="assets/icons/recomendaciones.png" alt="" /><span>{{ 'nav.recommendations' | transloco }}</span></a>
+      <a routerLink="/ranking" routerLinkActive="active" (click)="closeMenu()"><img src="assets/icons/ranking.png" alt="" /><span>{{ 'nav.ranking' | transloco }}</span></a>
+      <a routerLink="/insignias" routerLinkActive="active" (click)="closeMenu()"><img src="assets/icons/insignias.png" alt="" /><span>{{ 'nav.badges' | transloco }}</span></a>
+      <a routerLink="/instituciones" routerLinkActive="active" (click)="closeMenu()"><span aria-hidden="true">🏢</span><span>{{ 'nav.institutions' | transloco }}</span></a>
+    </nav>
+    <button type="button" class="logout" [disabled]="loggingOut" (click)="logout()"><img src="assets/icons/cerrar.png" alt="" /><span>{{ (loggingOut ? 'nav.loggingOut' : 'nav.logout') | transloco }}</span></button>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <button class="mobile-menu" type="button" [attr.aria-label]="'nav.openNavigation' | transloco" [attr.aria-expanded]="menuOpen" (click)="toggleMenu()">☰</button>
+      <span class="topbar-title">{{ 'nav.workspace' | transloco }}</span>
+      <div class="topbar-right">
+        <div class="notification-wrap" #notificationArea>
+          <button class="notification" type="button" [attr.aria-label]="'nav.notifications' | transloco" [attr.aria-expanded]="notificationOpen" (click)="toggleNotifications()">
+            <img src="assets/icons/campana.png" alt="" /><span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+          </button>
+          <section class="notification-panel" *ngIf="notificationOpen" [attr.aria-label]="'nav.notifications' | transloco">
+            <header><div><strong>{{ 'nav.notifications' | transloco }}</strong><small>{{ unreadCount }} {{ 'nav.unread' | transloco }}</small></div><button type="button" class="text-action" (click)="markAllRead()" [disabled]="unreadCount === 0">{{ 'nav.markAll' | transloco }}</button></header>
+            <p class="notification-state" *ngIf="notificationLoading">{{ 'nav.loadingNotifications' | transloco }}</p>
+            <div class="notification-error" *ngIf="notificationError"><span>{{ notificationError }}</span><button type="button" (click)="loadNotifications()">{{ 'nav.retry' | transloco }}</button></div>
+            <div class="notification-list" *ngIf="!notificationLoading && !notificationError && notifications.length">
+              <button class="notification-item" type="button" *ngFor="let item of notifications" [class.unread]="!item.leida" (click)="markNotificationRead(item)">
+                <span class="notification-dot" [class.read]="item.leida"></span><span class="notification-copy"><strong>{{ item.titulo }}</strong><span>{{ item.mensaje }}</span><small>{{ item.fechaCreacion | date:'short' }} · {{ (item.leida ? 'nav.read' : 'nav.unreadState') | transloco }}</small></span>
+              </button>
+            </div>
+            <p class="notification-state" *ngIf="!notificationLoading && !notificationError && !notifications.length">{{ 'nav.emptyNotifications' | transloco }}</p>
+          </section>
+        </div>
+        <div class="language-wrap" #languageArea>
+          <button class="language-button" type="button" [attr.aria-expanded]="languageOpen" aria-haspopup="menu" (click)="toggleLanguage()">
+            <span aria-hidden="true">🌐</span><span>{{ languageLabel }}</span><span aria-hidden="true">▼</span>
+          </button>
+          <div class="language-menu" *ngIf="languageOpen" role="menu" [attr.aria-label]="'nav.language' | transloco">
+            <button *ngFor="let language of languages" type="button" role="menuitemradio" [attr.aria-checked]="languageService.active === language.code" [class.selected]="languageService.active === language.code" (click)="chooseLanguage(language.code)">{{ language.label }}</button>
+          </div>
+        </div>
+        <a class="user-chip" routerLink="/perfil" [attr.aria-label]="'nav.profile' | transloco"><span class="user-avatar">{{ email.charAt(0).toUpperCase() }}</span><span class="user-info"><strong>{{ email }}</strong><small>{{ 'nav.profile' | transloco }}</small></span><img class="profile-arrow" src="assets/icons/flecha.png" alt="" /></a>
+      </div>
+    </header>
+    <router-outlet></router-outlet>
+  </div>
+</div>

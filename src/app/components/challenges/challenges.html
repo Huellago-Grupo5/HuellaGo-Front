@@ -1,0 +1,59 @@
+<main class="dashboard-content challenges-page">
+  <section class="welcome retos-hero"><div class="retos-hero-info"><p class="eyebrow">{{ 'challenges.community' | transloco }}</p><h1>{{ 'challenges.title' | transloco }}</h1><p>{{ 'challenges.intro' | transloco }}</p></div><div class="points-summary"><span class="points-leaf">✦</span><div><small>{{ 'challenges.ecoPoints' | transloco }}</small><strong>{{ summary?.ecoPuntos ?? '—' }}</strong></div></div></section>
+
+  <div class="notice success" *ngIf="notice" role="status"><span>✓</span>{{ notice }}</div>
+  <div class="notice error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</div>
+  <p class="loading-state" *ngIf="loading">{{ 'challenges.loading' | transloco }}</p>
+
+  <ng-container *ngIf="!loading">
+    <section class="retos-toolbar" *ngIf="tab !== 'colectivos' && tab !== 'completado'">
+      <label class="search-box"><img src="assets/icons/buscar.png" alt="" /><input type="search" [placeholder]="'challenges.search' | transloco" [(ngModel)]="search" [attr.aria-label]="'challenges.search' | transloco" /></label>
+      <button class="sort-btn" type="button" (click)="toggleSort()"><span aria-hidden="true">↕</span>{{ (easyFirst ? 'challenges.easy' : 'challenges.hard') | transloco }}<span class="arrow-down">⌄</span></button>
+    </section>
+
+    <nav class="tabs" [attr.aria-label]="'challenges.tabs' | transloco">
+      <button type="button" class="tab" [class.active]="tab === 'disponible'" (click)="setTab('disponible')"><span class="tab-icon">♧</span>{{ 'challenges.available' | transloco }} <span class="tab-count">{{ availableRetos.length }}</span></button>
+      <button type="button" class="tab" [class.active]="tab === 'activo'" (click)="setTab('activo')"><span class="tab-icon">◷</span>{{ 'challenges.active' | transloco }} <span class="tab-count">{{ activeIndividuals.length + activeCollectives.length }}</span></button>
+      <button type="button" class="tab" [class.active]="tab === 'completado'" (click)="setTab('completado')"><span class="tab-icon">✓</span>{{ 'challenges.completed' | transloco }} <span class="tab-count">{{ completedRetos.length }}</span></button>
+      <button type="button" class="tab" [class.active]="tab === 'colectivos'" (click)="setTab('colectivos')"><span class="tab-icon">♧</span>{{ 'challenges.collective' | transloco }} <span class="tab-count">{{ colectivos.length }}</span></button>
+    </nav>
+
+    <div class="cards-panel" *ngIf="tab === 'disponible'">
+      <p class="notice error" *ngIf="availableError">{{ availableError }} <button type="button" (click)="loadData()">{{ 'challenges.retry' | transloco }}</button></p>
+      <section class="cards-grid" *ngIf="availableRetos.length; else noAvailable">
+        <article class="reto-card" *ngFor="let reto of availableRetos">
+          <div class="reto-card-image"><img [src]="retoImage(reto)" alt="" /><span class="difficulty" [ngClass]="difficultyClass(reto.dificultad)">{{ difficultyLabel(reto.dificultad) }}</span><span class="points">+{{ reto.puntosRecompensa ?? 0 }} <span aria-hidden="true">✦</span></span></div>
+          <div class="reto-card-body"><div class="category-label">{{ reto.categoriaNombre || ('challenges.category' | transloco) }}</div><h2>{{ reto.titulo }}</h2><p>{{ reto.descripcion }}</p><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div><div class="reto-card-footer"><span>{{ retoDuration(reto) }}</span><button type="button" (click)="openReto(reto)">{{ 'challenges.detail' | transloco }}</button></div></div>
+        </article>
+      </section>
+      <ng-template #noAvailable><div class="empty-card"><span>🌿</span><h2>{{ 'challenges.noAvailable' | transloco }}</h2><p *ngIf="!availableError">{{ 'challenges.noAvailableHelp' | transloco }}</p></div></ng-template>
+    </div>
+
+    <div class="cards-panel" *ngIf="tab === 'activo'">
+      <p class="notice error" *ngIf="activeError">{{ activeError }} <button type="button" (click)="loadData()">{{ 'challenges.retry' | transloco }}</button></p>
+      <section class="cards-grid" *ngIf="activeIndividuals.length; else noIndividualActive">
+        <article class="reto-card" *ngFor="let item of activeIndividuals">
+          <div class="reto-card-image"><img [src]="retoImage(item.reto)" alt="" /><span class="difficulty" [ngClass]="difficultyClass(item.reto.dificultad)">{{ difficultyLabel(item.reto.dificultad) }}</span><span class="status-pill">{{ 'challenges.inProgress' | transloco }}</span></div>
+          <div class="reto-card-body"><div class="category-label">{{ item.reto.categoriaNombre || ('challenges.category' | transloco) }}</div><h2>{{ item.reto.titulo }}</h2><p>{{ item.reto.descripcion }}</p><div class="progress-track"><div class="progress-fill" [style.width.%]="progressPercent(item.participacion.progreso)"></div></div><div class="reto-card-footer"><span>{{ 'challenges.progress' | transloco:{ progress: progressPercent(item.participacion.progreso) | number:'1.0-0' } }}</span><button type="button" (click)="openReto(item.reto,item.participacion)">{{ 'challenges.seeProgress' | transloco }}</button></div></div>
+        </article>
+      </section>
+      <ng-template #noIndividualActive><div class="empty-card compact"><span>◷</span><h2>{{ 'challenges.noActive' | transloco }}</h2><p>{{ 'challenges.noActiveHelp' | transloco }}</p><button type="button" (click)="setTab('disponible')">{{ 'challenges.availableLink' | transloco }}</button></div></ng-template>
+      <p class="data-note" *ngIf="unlinkedActiveCount">{{ 'messages.unlinkedChallenges' | transloco:{ count: unlinkedActiveCount } }}</p>
+      <h2 class="subheading" *ngIf="activeCollectives.length">{{ 'challenges.collectiveActive' | transloco }}</h2>
+      <section class="cards-grid" *ngIf="activeCollectives.length">
+        <article class="collective-card" *ngFor="let item of activeCollectives"><span class="collective-tag">{{ 'challenges.communityChallenge' | transloco }}</span><h3>{{ item.reto.titulo }}</h3><p>{{ 'challenges.collectiveHelp' | transloco }}</p><div class="collective-progress-label"><span>{{ 'challengeDetail.collectiveProgress' | transloco }}</span><strong>{{ progressPercent(item.reto.progresoColectivo) | number:'1.0-0' }}%</strong></div><div class="progress-track"><div class="progress-fill" [style.width.%]="progressPercent(item.reto.progresoColectivo)"></div></div><div class="colectivo-footer"><span>{{ 'challenges.participants' | transloco:{ count: item.reto.participantes } }}</span><button type="button" (click)="openCollective(item.reto,item.participacion)">{{ 'challenges.seeProgress' | transloco }}</button></div></article>
+      </section>
+    </div>
+
+    <div class="cards-panel" *ngIf="tab === 'completado'">
+      <section class="cards-grid" *ngIf="completedRetos.length; else noCompleted">
+        <article class="reto-card completed-card" *ngFor="let item of completedRetos"><div class="reto-card-image"><img [src]="retoImage(item.reto)" alt="" /><span class="completed-pill">✓ {{ 'challenges.completedBadge' | transloco }}</span><span class="points">+{{ item.reto.puntosRecompensa ?? 0 }} ✦</span></div><div class="reto-card-body"><div class="category-label">{{ item.reto.categoriaNombre || ('challenges.category' | transloco) }}</div><h2>{{ item.reto.titulo }}</h2><p>{{ item.reto.descripcion }}</p><div class="reto-card-footer"><span>{{ item.participacion.fechaCompletado | date:'mediumDate' }}</span><span class="reward-label">{{ 'challenges.ecoPointsLabel' | transloco:{ points: item.reto.puntosRecompensa ?? 0 } }}</span></div></div></article>
+      </section>
+      <ng-template #noCompleted><div class="empty-card compact"><span>✓</span><h2>{{ 'challenges.noCompleted' | transloco }}</h2><p>{{ 'challenges.noCompletedHelp' | transloco }}</p></div></ng-template>
+    </div>
+
+    <app-collective-challenges *ngIf="tab === 'colectivos'" [retos]="visibleCollectives" [participaciones]="participaciones" [busy]="busy" [errorMessage]="collectiveError" (join)="joinCollective($event)" (open)="openCollective($event.reto,$event.participation)"></app-collective-challenges>
+  </ng-container>
+
+  <app-challenge-detail *ngIf="selectedReto || selectedCollective" [reto]="selectedReto" [colectivo]="selectedCollective" [participation]="selectedParticipation" [advances]="advances" [busy]="busy" (close)="closeDetails()" (accept)="acceptReto($event)" (join)="joinCollective($event)" (saveProgress)="updateProgress($event)" (complete)="completeReto()"></app-challenge-detail>
+</main>

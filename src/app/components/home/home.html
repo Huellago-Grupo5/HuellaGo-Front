@@ -1,0 +1,33 @@
+<div class="home-page">
+  <header class="home-header">
+    <a class="home-brand" routerLink="/" aria-label="HuellaGo"><img src="assets/images/Logo.png" alt="" /><span>HuellaGo</span></a>
+    <nav><a href="#inicio">{{ 'landing.home' | transloco }}</a><a href="#funciona">{{ 'landing.howItWorks' | transloco }}</a></nav>
+    <div class="home-actions"><a class="sign-in" routerLink="/login">{{ 'auth.login' | transloco }}</a><a class="sign-up" routerLink="/registro">{{ 'auth.create' | transloco }}</a></div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">{{ 'landing.eyebrow' | transloco }}</span>
+        <h1>{{ 'landing.titleStart' | transloco }} <span>{{ 'landing.titleHighlight' | transloco }}</span> {{ 'landing.titleEnd' | transloco }}</h1>
+        <p>{{ 'landing.intro' | transloco }}</p>
+        <div class="hero-actions"><a class="primary" routerLink="/registro">{{ 'landing.start' | transloco }} <span aria-hidden="true">→</span></a><a class="secondary" href="#funciona">{{ 'landing.learn' | transloco }}</a></div>
+        <div class="trust-note"><span>🌱</span>{{ 'landing.trust' | transloco }}</div>
+      </div>
+      <div class="hero-art"><span class="art-orbit orbit-one"></span><span class="art-orbit orbit-two"></span><img src="assets/images/Planeta.png" alt="" /></div>
+    </section>
+
+    <section class="how" id="funciona">
+      <div class="section-title"><span class="eyebrow">{{ 'landing.stepsEyebrow' | transloco }}</span><h2>{{ 'landing.stepsTitle' | transloco }}</h2><p>{{ 'landing.stepsIntro' | transloco }}</p></div>
+      <div class="steps-grid">
+        <article><span class="step-icon">👤</span><small>01</small><h3>{{ 'landing.stepAccount' | transloco }}</h3><p>{{ 'landing.stepAccountHelp' | transloco }}</p></article>
+        <article><span class="step-icon">♻️</span><small>02</small><h3>{{ 'landing.stepHabits' | transloco }}</h3><p>{{ 'landing.stepHabitsHelp' | transloco }}</p></article>
+        <article><span class="step-icon">🌍</span><small>03</small><h3>{{ 'landing.stepMeasure' | transloco }}</h3><p>{{ 'landing.stepMeasureHelp' | transloco }}</p></article>
+        <article><span class="step-icon">🌿</span><small>04</small><h3>{{ 'landing.stepImprove' | transloco }}</h3><p>{{ 'landing.stepImproveHelp' | transloco }}</p></article>
+      </div>
+    </section>
+
+    <section class="closing"><div><span class="eyebrow">{{ 'landing.closingEyebrow' | transloco }}</span><h2>{{ 'landing.closingTitle' | transloco }}</h2><p>{{ 'landing.closingIntro' | transloco }}</p></div><a class="primary" routerLink="/registro">{{ 'landing.start' | transloco }} <span aria-hidden="true">→</span></a></section>
+  </main>
+  <footer><a class="home-brand" routerLink="/"><img src="assets/images/Logo.png" alt="" /><span>HuellaGo</span></a><span>{{ 'landing.footer' | transloco }}</span></footer>
+</div>

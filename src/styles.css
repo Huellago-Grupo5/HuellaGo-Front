@@ -292,3 +292,669 @@ body {
     font-size: 32px;
   }
 }
+
+/* HuellaGo appearance tokens. Component overrides below use the same palette. */
+:root {
+  color-scheme: light;
+  --hg-page: #f8faf8;
+  --hg-surface: #ffffff;
+  --hg-surface-raised: #f4f8f5;
+  --hg-surface-inset: #eef3ef;
+  --hg-border: #d8e2dc;
+  --hg-text: #20352d;
+  --hg-text-secondary: #43564b;
+  --hg-text-muted: #5c6c62;
+  --hg-green: #137a42;
+  --hg-green-soft: #e2f5e8;
+  --hg-focus: #16834b;
+  --hg-error-text: #8f211b;
+  --hg-error-bg: #fff0ee;
+  --hg-error-border: #e8aaa5;
+  --hg-warning-text: #704900;
+  --hg-warning-bg: #fff6dc;
+  --hg-warning-border: #e6c76f;
+  --hg-success-text: #145c35;
+  --hg-success-bg: #e6f6eb;
+  --hg-success-border: #9bcbaa;
+}
+
+html[data-theme='oscuro'] {
+  color-scheme: dark;
+  --hg-page: #121212;
+  --hg-surface: #1e1e1e;
+  --hg-surface-raised: #262626;
+  --hg-surface-inset: #181818;
+  --hg-border: #333333;
+  --hg-text: #ffffff;
+  --hg-text-primary: #f5f5f5;
+  --hg-text-secondary: #bdbdbd;
+  --hg-text-muted: #bdbdbd;
+  --hg-green: #22c55e;
+  --hg-green-soft: #262626;
+  --hg-button-primary: #16a34a;
+  --hg-on-accent: #07130a;
+  --hg-sidebar: #181818;
+  --hg-surface-hover: #292929;
+  --hg-surface-hover-strong: #303030;
+  --hg-surface-subtle: #2a2a2a;
+  --hg-surface-selected: #24342a;
+  --hg-border-strong: #484848;
+  --hg-track: #444444;
+  --hg-chart-grid: #666666;
+  --hg-focus: #22c55e;
+  --hg-error-text: #ffc2bc;
+  --hg-error-bg: #3a2221;
+  --hg-error-border: #8f4b45;
+  --hg-warning-text: #ffe2a2;
+  --hg-warning-bg: #382f1b;
+  --hg-warning-border: #806a35;
+  --hg-success-text: #b5edc5;
+  --hg-success-bg: #1b3826;
+  --hg-success-border: #416d4f;
+}
+
+html[data-theme='oscuro'] body,
+html[data-theme='oscuro'] .app-frame,
+html[data-theme='oscuro'] .workspace {
+  background: var(--hg-page);
+  color: var(--hg-text);
+}
+
+/* Header, account identity, notification and language menus. */
+html[data-theme='oscuro'] body .topbar {
+  background: var(--hg-surface);
+  border-color: var(--hg-border);
+  color: var(--hg-text);
+}
+html[data-theme='oscuro'] body .topbar-title,
+html[data-theme='oscuro'] body .user-info strong,
+html[data-theme='oscuro'] body .user-chip,
+html[data-theme='oscuro'] body .mobile-menu { color: var(--hg-text); }
+html[data-theme='oscuro'] body .user-info small { color: var(--hg-text-muted); }
+html[data-theme='oscuro'] body .user-avatar { background: #254b34; color: #d5f8df; }
+html[data-theme='oscuro'] body .notification,
+html[data-theme='oscuro'] body .language-button,
+html[data-theme='oscuro'] body .notification-panel,
+html[data-theme='oscuro'] body .language-menu {
+  background: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text);
+}
+html[data-theme='oscuro'] body .notification-panel > header,
+html[data-theme='oscuro'] body .notification-item { border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .notification-panel > header strong,
+html[data-theme='oscuro'] body .notification-copy strong,
+html[data-theme='oscuro'] body .language-menu button { color: var(--hg-text); }
+html[data-theme='oscuro'] body .notification-panel > header small,
+html[data-theme='oscuro'] body .notification-copy > span,
+html[data-theme='oscuro'] body .notification-copy small,
+html[data-theme='oscuro'] body .notification-state,
+html[data-theme='oscuro'] body .language-button span:last-child { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .notification-item { background: var(--hg-surface); }
+html[data-theme='oscuro'] body .notification-item:hover,
+html[data-theme='oscuro'] body .notification-item.unread,
+html[data-theme='oscuro'] body .language-menu button:hover,
+html[data-theme='oscuro'] body .language-menu button.selected { background: #294432; color: #e5ffeb; }
+html[data-theme='oscuro'] body .notification-badge { border-color: var(--hg-surface); }
+
+/* Common page titles, copy and card/panel surfaces. */
+html[data-theme='oscuro'] body :is(
+  .dashboard-content,.section-page,.badges-page,.ranking-page,.profile-page,
+  .institution-page,.challenges-page,.recommendations-page,.onboarding-page,
+  .detail-backdrop,.reto-detail
+) { color: var(--hg-text); }
+html[data-theme='oscuro'] body :is(
+  .card,.content-card,.profile-card,.form-card,.error-card,.detail-main,.detail-card,
+  .institution-card,.metric-panel,.campaigns,.table-card,.ranking-card,.progress-card,
+  .badge-section,.recommendation-card,.history-card,.reto-card,.collective-card,
+  .empty-card,.saved-card,.goal-card,.wizard-panel,.wizard-form,.welcome-panel,
+  .result-screen,.detail-modal,.reto-detail,.notification-panel,.points-card,
+  .onboarding-shell,.tabs,.toolbar
+) {
+  background: var(--hg-surface);
+  border-color: var(--hg-border);
+  color: var(--hg-text);
+  box-shadow: 0 8px 24px #00000030;
+}
+html[data-theme='oscuro'] body :is(
+  .page-heading h1,.welcome h1,.section-heading h1,.detail-main h2,.detail-card h3,
+  .profile-card h2,.form-card h2,.progress-card h2,.badge-section h2,.ranking-page h2,
+  .institution-page h1,.institution-card h2,.institution-card h3,.institution-card h4,
+  .metric-panel h3,.campaign-row strong,.welcome-panel h1,.wizard-header h1,
+  .result-screen h1,.result-screen h2,.recommendation-card h2,.recommendation-card h3,
+  .badge-card h3,.level-info h3,.table-card th,.user-info strong,.retos-hero h1,.hero h1
+) { color: var(--hg-text); }
+html[data-theme='oscuro'] body :is(
+  .intro,.welcome p:not(.eyebrow),.section-heading p:last-child,.detail-description,
+  .detail-facts dt,.detail-facts dd,.muted,.hint,.email,.menu-row small,
+  .stat-label,.stat-footer,.activity-info,.activity-value,.history-count,
+  .chart-labels,.chart-caption,.disclaimer,.state,.loading,.loading-state,
+  .empty-state,.details-loading,.details-notice,.field-label,.level-detail,
+  .badge-card p,.earned-date,.badge-progress,.section-description,.institution-page p,
+  .institution-card label,.institution-card p,.metric-panel span,.campaign-row span,
+  .campaign-row small,.notification-copy small,.subtitle,.method-note,.backend-limit,
+  .retos-hero p,.hero-copy,.priority-copy,.status,.updated-at,.info,.period-note,.fields-grid label
+) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body :is(
+  .dashboard-content,.section-page,.badges-page,.ranking-page,.profile-page,
+  .institution-page,.challenges-page,.recommendations-page,.onboarding-page,
+  .detail-backdrop,.reto-detail
+) :is(p,span,small,label,legend,dt,dd,li,td,th,time,.status,.updated-at,.period-note,.info) {
+  color: var(--hg-text-secondary);
+}
+html[data-theme='oscuro'] body :is(
+  .dashboard-content,.section-page,.badges-page,.ranking-page,.profile-page,
+  .institution-page,.challenges-page,.recommendations-page,.onboarding-page,
+  .detail-backdrop,.reto-detail
+) :is(h1,h2,h3,h4,strong,b) { color: var(--hg-text); }
+html[data-theme='oscuro'] body :is(
+  .card,.content-card,.profile-card,.form-card,.institution-card,.metric-panel,
+  .campaigns,.table-card,.ranking-card,.progress-card,.badge-section,.recommendation-card,
+  .history-card,.reto-card,.collective-card,.empty-card,.saved-card,.detail-main,.detail-card
+) { border-color: var(--hg-border); }
+
+/* Nested surfaces and data visualization. */
+html[data-theme='oscuro'] body :is(
+  .stats article,.equivalence-item,.activity-icon,.activity-track,.recommendation-count,
+  .points-summary,.points-card,.metric-panel .metrics > div,.campaign-form,
+  .backend-limit,.detail-image,.detail-image > div,.wizard-header,.goal-grid .goal-card,
+  .level-icon,.badge-icon,.history-icon,.form-icon.transport,.saved-icon
+) { background-color: var(--hg-surface-raised); color: var(--hg-text); }
+html[data-theme='oscuro'] body :is(
+  .history-row,.history-header,.history-list,.history-table,.advance-list li,
+  .detail-facts > div,.objective-line,.profile-actions,.menu-row,.campaign-row,
+  .tabs,.tabs button,.tab,.table-card th,.table-card td,.user-row
+) { border-color: var(--hg-border); }
+html[data-theme='oscuro'] body :is(.history-chart .chart-point) { fill: var(--hg-surface); }
+html[data-theme='oscuro'] body :is(.chart-axis,.chart-gridline) { stroke: #52665a; }
+html[data-theme='oscuro'] body :is(.progress-track,.level-track,.badge-track,.detail-card .progress-track) { background: #34463a; }
+html[data-theme='oscuro'] body :is(.locked-card,.badge-card) { background: var(--hg-surface-raised); border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .hero { background: linear-gradient(115deg, #1b3d29, #1a2720); }
+html[data-theme='oscuro'] body .priority-banner,
+html[data-theme='oscuro'] body .status.info { background: #1c3927; border-color: #3c7650; color: #d8ffe2; }
+html[data-theme='oscuro'] body .tabs { background: var(--hg-surface-inset); }
+html[data-theme='oscuro'] body .tabs button { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .tabs button.active { background: #16834b; color: #fff; }
+html[data-theme='oscuro'] body .status.info :is(span,small,p,strong) { color: #d8ffe2; }
+
+/* Forms, filters, tables and neutral controls. */
+html[data-theme='oscuro'] body :is(input,select,textarea,.search-box,.category-select,.sort-btn) {
+  background-color: var(--hg-surface-inset);
+  border-color: var(--hg-border);
+  color: var(--hg-text);
+  caret-color: var(--hg-green);
+}
+html[data-theme='oscuro'] body :is(input,select,textarea)::placeholder { color: var(--hg-text-muted); opacity: 1; }
+html[data-theme='oscuro'] body :is(input,select,textarea,.search-box,.category-select,.sort-btn):focus {
+  border-color: var(--hg-focus);
+  outline-color: var(--hg-focus);
+  box-shadow: 0 0 0 3px #73e29635;
+}
+html[data-theme='oscuro'] body :is(.action-link,.menu-row,.back,.close-detail,.sort-btn,.tab,.tabs button,.text-button) {
+  color: var(--hg-text-secondary);
+}
+html[data-theme='oscuro'] body :is(.action-link,.menu-row,.back,.close-detail,.sort-btn,.tab,.tabs button):hover {
+  background-color: var(--hg-surface-raised);
+  color: var(--hg-text);
+}
+/* Profile options inherit a white component background in the light theme.
+   Override only this component's rows when dark mode is active. */
+html[data-theme='oscuro'] body .profile-page .profile-card h2 { color: var(--hg-text); }
+html[data-theme='oscuro'] body .profile-page .profile-card > .email { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .profile-page .profile-actions > .menu-row {
+  background-color: var(--hg-surface-raised);
+  border-bottom-color: var(--hg-border);
+  color: var(--hg-text);
+}
+html[data-theme='oscuro'] body .profile-page .profile-actions > .menu-row b { color: var(--hg-text); }
+html[data-theme='oscuro'] body .profile-page .profile-actions > .menu-row small { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .profile-page .profile-actions > .menu-row .chevron { color: var(--hg-text-muted); }
+html[data-theme='oscuro'] body .profile-page .profile-actions > .menu-row:hover,
+html[data-theme='oscuro'] body .profile-page .profile-actions > .menu-row:focus-visible {
+  background-color: var(--hg-surface-inset);
+  color: var(--hg-text);
+}
+html[data-theme='oscuro'] body :is(th,td) { border-color: var(--hg-border); }
+html[data-theme='oscuro'] body :is(.history-row,.user-row,.table-row) { background-color: transparent; color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body :is(.user-row.is-me,.podium-item.first,.own-position) { background-color: #244532; color: #f0fff3; }
+html[data-theme='oscuro'] body .rank-number { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .points-cell { color: var(--hg-green); }
+html[data-theme='oscuro'] body .collective-card .member-progress { background: #1b3826; color: #d8ffe2; }
+
+/* Status messages retain clear semantic color pairs in both themes. */
+html[data-theme='oscuro'] body :is(.error,.error-message,.error-card,.load-error,.notification-error,.field-error,.form-error) {
+  background-color: var(--hg-error-bg);
+  border-color: var(--hg-error-border);
+  color: var(--hg-error-text);
+}
+html[data-theme='oscuro'] body .report-row p { color: var(--hg-error-text); }
+html[data-theme='oscuro'] body :is(.error,.error-message,.error-card,.load-error,.notification-error,.field-error,.form-error) :is(p,span,small,strong,button) { color: var(--hg-error-text); }
+html[data-theme='oscuro'] body :is(.warning,.warning-message,.method-note,.notice.warning) {
+  background-color: var(--hg-warning-bg);
+  border-color: var(--hg-warning-border);
+  color: var(--hg-warning-text);
+}
+html[data-theme='oscuro'] body :is(.warning,.warning-message,.notice.warning) :is(p,span,small,strong) { color: var(--hg-warning-text); }
+html[data-theme='oscuro'] body :is(.success,.success-message,.notice.success,.saved-card) {
+  background-color: var(--hg-success-bg);
+  border-color: var(--hg-success-border);
+  color: var(--hg-success-text);
+}
+html[data-theme='oscuro'] body :is(.success,.success-message,.notice.success,.saved-card) :is(p,span,small,strong,h2) { color: var(--hg-success-text); }
+
+/* HuellaGo green stays vivid and readable on dark surfaces. */
+html[data-theme='oscuro'] body :is(.eyebrow,.text-link,.action-link,.back-link,.cancel-link,
+  .category-label,.points-number,.obtained-label,.level-info .level-name,.tab.active,
+  .tabs button.active,.notification-dot,.check.done) { color: var(--hg-green); }
+html[data-theme='oscuro'] body :is(.eyebrow,.text-link,.action-link,.back-link,.cancel-link,
+  .category-label,.points-number,.obtained-label,.level-info .level-name,.tab.active,
+  .tabs button.active,.member-progress strong,.activity-value strong) { color: var(--hg-green); }
+html[data-theme='oscuro'] body :is(.badge,.completed-pill,.status-pill,.collective-tag,
+  .level-pill,.total-pill,.selected) { background-color: #244532; color: #d8ffe2; border-color: #477858; }
+html[data-theme='oscuro'] body :is(.primary-button,.primary-btn,.report-button,.refresh-button,
+  .join-button,.dashboard-btn,.complete-button,.institution-card button,.form-actions button) {
+  background-color: #16834b;
+  color: #ffffff;
+}
+html[data-theme='oscuro'] body :is(.primary-button,.primary-btn,.report-button,.refresh-button,
+  .join-button,.dashboard-btn,.complete-button,.institution-card button):hover:not(:disabled) {
+  background-color: #1c9958;
+}
+
+@media (max-width: 900px) {
+  html[data-theme='oscuro'] body .topbar .mobile-menu { color: var(--hg-text); }
+}
+
+/* Dark theme surfaces and text: scoped to the dark theme so light appearance stays unchanged. */
+html[data-theme='oscuro'] body .app-frame,
+html[data-theme='oscuro'] body .app-frame .workspace,
+html[data-theme='oscuro'] body .app-frame .workspace > router-outlet + *,
+html[data-theme='oscuro'] body .home-page,
+html[data-theme='oscuro'] body .auth-page,
+html[data-theme='oscuro'] body .reset-page {
+  background-color: var(--hg-page);
+  color: var(--hg-text-primary);
+}
+
+/* Application chrome. */
+html[data-theme='oscuro'] body .app-frame .sidebar {
+  background-color: var(--hg-sidebar);
+  border-right: 1px solid var(--hg-border);
+}
+html[data-theme='oscuro'] body .app-frame .side-nav a,
+html[data-theme='oscuro'] body .app-frame .logout { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .side-nav a:hover,
+html[data-theme='oscuro'] body .app-frame .side-nav a:hover,
+html[data-theme='oscuro'] body .app-frame .logout:hover { background-color: var(--hg-surface-subtle); color: #fff; }
+html[data-theme='oscuro'] body .app-frame .side-nav a.active {
+  background-color: #15803d;
+  color: #ffffff;
+}
+html[data-theme='oscuro'] body .app-frame .side-nav a.active img { filter: brightness(0) invert(1); }
+html[data-theme='oscuro'] body .app-frame .topbar {
+  background-color: var(--hg-surface);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame :is(.topbar-title,.user-info strong,.user-chip,.mobile-menu) { color: #fff; }
+html[data-theme='oscuro'] body .app-frame .user-info small { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .user-avatar { background-color: var(--hg-surface-hover-strong); color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame :is(.notification,.language-button,.notification-panel,.language-menu) {
+  background-color: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .notification-item { background-color: var(--hg-surface); border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .app-frame :is(.notification-copy strong,.notification-panel header strong,.language-menu button) { color: #fff; }
+html[data-theme='oscuro'] body .app-frame :is(.notification-copy span,.notification-copy small,.notification-state,.language-button span:last-child) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame :is(.notification-item:hover,.notification-item.unread,.language-menu button:hover,.language-menu button.selected) {
+  background-color: var(--hg-surface-hover-strong);
+  color: #fff;
+}
+
+/* Shared page surfaces and readable heading defaults across every app module. */
+html[data-theme='oscuro'] body .app-frame .workspace :is(
+  .card,.content-card,.profile-card,.form-card,.error-card,.detail-main,.detail-card,
+  .institution-card,.metric-panel,.campaigns,.table-card,.ranking-card,.progress-card,
+  .badge-section,.recommendation-card,.history-card,.reto-card,.collective-card,
+  .empty-card,.saved-card,.goal-card,.wizard-panel,.wizard-form,.welcome-panel,
+  .result-screen,.detail-modal,.reto-detail,.points-card,.onboarding-shell,.toolbar
+) {
+  background-color: var(--hg-surface);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+  box-shadow: 0 8px 24px #00000030;
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(h1,h2,h3,h4,h5,h6) { color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace :is(p,span,small,label,legend,dt,dd,li,td,th,time) { color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(
+  .intro,.welcome p:not(.eyebrow),.section-heading p,.detail-description,.muted,.hint,.email,
+  .menu-row small,.stat-label,.stat-footer,.activity-info,.activity-value,.history-count,
+  .rank-number,.level,.participant-name span,.collective-progress-label,.collective-state,
+  .chart-labels,.chart-caption,.disclaimer,.state,.loading,.loading-state,.empty-state,
+  .details-loading,.details-notice,.field-label,.level-detail,.badge-card p,.earned-date,
+  .badge-progress,.section-description,.institution-page p,.institution-card label,
+  .metric-panel span,.campaign-row span,.campaign-row small,.subtitle,.method-note,
+  .backend-limit,.retos-hero p,.hero-copy,.priority-copy,.status,.updated-at,.info,
+  .period-note,.fields-grid label,.history-date,.history-copy span,.history-copy small
+) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(
+  .page-heading h1,.welcome h1,.section-heading h1,.section-title h2,.detail-main h2,
+  .detail-card h3,.profile-card h2,.form-card h2,.progress-card h2,.badge-section h2,
+  .ranking-page h2,.institution-page h1,.institution-card h2,.institution-card h3,
+  .institution-card h4,.metric-panel h3,.campaign-row strong,.welcome-panel h1,
+  .wizard-header h1,.result-screen h1,.result-screen h2,.recommendation-card h2,
+  .recommendation-card h3,.badge-card h3,.level-info h3,.table-card th,.retos-hero h1,.hero h1
+) { color: #fff; }
+
+/* Dashboard titles and its data visualizations. */
+html[data-theme='oscuro'] body .app-frame .workspace .dashboard-content .welcome h1,
+html[data-theme='oscuro'] body .app-frame .workspace .dashboard-content .section-title h2 { color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.chart-axis,.chart-gridline) { stroke: #666; }
+html[data-theme='oscuro'] body .app-frame .workspace .history-chart .chart-point { fill: var(--hg-surface); stroke: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.activity-icon,.activity-track,.equivalence-item,.recommendation-count,.stats article,.metric-panel .metrics > div) {
+  background-color: var(--hg-surface-raised);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(
+  .community-intro,.step-badge,.category-chip,.priority,.history-badge,.category-energia,
+  .category-alimentacion,.category-residuos,.priority-alta,.priority-media,.priority-baja,
+  .level-pill,.badge,.completed-pill,.status-pill,.collective-tag,.total-pill,.selected,
+  .medal,.podium-base,.profile-card .avatar,.leaf-mark
+) {
+  background-color: var(--hg-surface-hover);
+  border-color: var(--hg-border-strong);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(.step-badge,.category-chip,.history-badge,.badge,.completed-pill,.status-pill,.collective-tag,.total-pill,.selected) { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .community-intro :is(h2,p) { color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace .community-intro p { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.community-summary,.community-icon,.collective-state) { background-color: var(--hg-surface-hover); border-color: var(--hg-border-strong); }
+html[data-theme='oscuro'] body .app-frame .workspace .community-summary strong { color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .community-summary :is(p,span) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .collective-card .member-progress { background-color: var(--hg-surface-hover); color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .collective-card .member-progress strong { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .goal-card.selected {
+  background-color: var(--hg-surface-selected);
+  border-color: var(--hg-green);
+  color: #fff;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .podium-base { color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace .hero { background: var(--hg-sidebar); }
+html[data-theme='oscuro'] body .app-frame .workspace .priority-banner {
+  background: #262626;
+  border-color: var(--hg-border-strong);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .priority-banner :is(strong,p) { color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.stat-icon.green,.stat-icon.yellow,.stat-icon.blue,.step-icon) { background-color: var(--hg-surface-subtle); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.progress-track,.level-track,.badge-track) { background-color: var(--hg-track); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.activity-fill,.progress-value,.level-fill,.badge-fill) { background-color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.points-number,.points-cell,.points,.obtained-label,.activity-value strong) { color: var(--hg-green); }
+
+/* Profile options, tables, tabs, forms and interactive controls. */
+html[data-theme='oscuro'] body .app-frame .workspace .profile-actions > .menu-row {
+  background-color: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .profile-actions > .menu-row b { color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .profile-actions > .menu-row small { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .profile-actions > .menu-row:hover,
+html[data-theme='oscuro'] body .app-frame .workspace .profile-actions > .menu-row:focus-visible { background-color: var(--hg-surface-hover-strong); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.tabs,.tabs button,.tab,.table-card th,.table-card td,.history-row,.history-list,.campaign-row,.user-row) {
+  border-color: var(--hg-border);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(.tabs,.tabs button,.tab) { background-color: var(--hg-surface-raised); color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .table-card tbody tr:hover { background-color: var(--hg-surface-hover); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.tabs button.active,.tab.active) {
+  background-color: var(--hg-button-primary);
+  border-color: var(--hg-button-primary);
+  color: var(--hg-on-accent);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(input,select,textarea,.search-box,.category-select,.sort-btn) {
+  background-color: var(--hg-surface-inset);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+  caret-color: var(--hg-green);
+  accent-color: var(--hg-green);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(input,select,textarea)::placeholder { color: var(--hg-text-secondary); opacity: 1; }
+html[data-theme='oscuro'] body .app-frame .workspace :is(input,select,textarea,button,a,.menu-row,.sort-btn,.tab):focus-visible {
+  outline: 2px solid var(--hg-focus);
+  outline-offset: 2px;
+}
+html[data-theme='oscuro'] body .app-frame .workspace option { background-color: var(--hg-surface); color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.text-button,.action-link,.colectivo-footer button,.back,.close-detail) {
+  background-color: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .colectivo-footer button:hover {
+  background-color: var(--hg-button-primary);
+  color: var(--hg-on-accent);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(.action-link,.text-link,.back-link,.cancel-link,.eyebrow,.category-label,.notification-dot) { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .action-link { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.action-link,.text-button,.back,.close-detail,.sort-btn):hover { background-color: var(--hg-surface-hover-strong); color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.badge,.completed-pill,.status-pill,.collective-tag,.level-pill,.total-pill,.selected) {
+  background-color: var(--hg-surface-hover);
+  border-color: var(--hg-border-strong);
+  color: var(--hg-green);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(.user-row.is-me,.own-position) { background-color: var(--hg-surface-hover); color: var(--hg-text-primary); }
+
+/* Primary actions use dark text on the specified green for stronger contrast. */
+html[data-theme='oscuro'] body .app-frame .workspace :is(
+  .primary,.primary-button,.primary-btn,.btn-primary,.report-button,.refresh-button,
+  .join-button,.dashboard-btn,.complete-button,.form-actions button,.institution-card button,
+  .profile-page .primary,.banner-button
+) {
+  background-color: var(--hg-button-primary);
+  border-color: var(--hg-button-primary);
+  color: var(--hg-on-accent);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(.primary,.primary-button,.primary-btn,.btn-primary,.report-button,.refresh-button,.join-button,.dashboard-btn,.complete-button):hover:not(:disabled) {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}
+
+/* Semantic messages retain distinct, readable foreground/background pairs. */
+html[data-theme='oscuro'] body .app-frame .workspace :is(.error,.error-message,.error-card,.load-error,.notification-error,.field-error,.form-error) {
+  background-color: var(--hg-error-bg);
+  border-color: var(--hg-error-border);
+  color: var(--hg-error-text);
+}
+html[data-theme='oscuro'] body .app-frame .workspace :is(.error,.error-message,.error-card,.load-error,.notification-error,.field-error,.form-error) :is(p,span,small,strong,button) { color: var(--hg-error-text); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.warning,.warning-message,.method-note,.notice.warning) { background-color: var(--hg-warning-bg); border-color: var(--hg-warning-border); color: var(--hg-warning-text); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.warning,.warning-message,.notice.warning) :is(p,span,small,strong) { color: var(--hg-warning-text); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.success,.success-message,.notice.success,.saved-card) { background-color: var(--hg-success-bg); border-color: var(--hg-success-border); color: var(--hg-success-text); }
+html[data-theme='oscuro'] body .app-frame .workspace :is(.success,.success-message,.notice.success,.saved-card) :is(p,span,small,strong,h2) { color: var(--hg-success-text); }
+
+/* Public home, login, registration, password recovery and reset screens. */
+html[data-theme='oscuro'] body .home-page :is(.home-header,footer) { background-color: var(--hg-surface); border-color: var(--hg-border); color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .home-page .home-brand,
+html[data-theme='oscuro'] body .home-page :is(.hero h1,.section-title h2,.closing h2,.steps-grid h3) { color: #fff; }
+html[data-theme='oscuro'] body .home-page .hero h1 span { color: var(--hg-green); }
+html[data-theme='oscuro'] body .home-page :is(.sign-up,.primary) { background-color: var(--hg-button-primary); color: var(--hg-on-accent); }
+html[data-theme='oscuro'] body .home-page :is(.sign-up,.primary):hover { background-color: var(--hg-green); color: var(--hg-on-accent); }
+html[data-theme='oscuro'] body .home-page :is(.home-header nav a,.sign-in,.hero-copy > p,.section-title > p,.closing p,.steps-grid p,.trust-note) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .home-page :is(.hero,.closing) { background: var(--hg-sidebar); }
+html[data-theme='oscuro'] body .home-page .steps-grid article { background-color: var(--hg-surface); border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .home-page .secondary { background-color: var(--hg-surface-raised); border-color: var(--hg-border); color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .home-page .art-orbit { border-color: #555; }
+html[data-theme='oscuro'] body :is(.auth-card,.forgot-modal,.reset-card) { background-color: var(--hg-surface); border-color: var(--hg-border); color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .auth-page .auth-image { background-color: var(--hg-sidebar); }
+html[data-theme='oscuro'] body :is(.auth-form h1,.forgot-modal h2,.reset-card h1) { color: #fff; }
+html[data-theme='oscuro'] body :is(.auth-intro,.bottom-link,.terms-row,.forgot-modal p,.reset-card .intro,.reset-card label,.reset-card small) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .reset-card .brand { color: #fff; }
+html[data-theme='oscuro'] body :is(.auth-page,.reset-page) .field-error { color: var(--hg-error-text); }
+html[data-theme='oscuro'] body :is(.auth-fields input,.reset-card input) { background-color: var(--hg-surface-inset); border-color: var(--hg-border); color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body :is(.auth-fields input,.reset-card input)::placeholder { color: var(--hg-text-secondary); opacity: 1; }
+html[data-theme='oscuro'] body .auth-page .btn-primary,
+html[data-theme='oscuro'] body .reset-card form button { background-color: var(--hg-button-primary); color: var(--hg-on-accent); }
+html[data-theme='oscuro'] body .auth-page .auth-notice:not(.error) { background-color: var(--hg-success-bg); color: var(--hg-success-text); }
+html[data-theme='oscuro'] body .auth-page .auth-notice.error { background-color: var(--hg-error-bg); color: var(--hg-error-text); }
+html[data-theme='oscuro'] body .auth-page .forgot { color: var(--hg-green); }
+html[data-theme='oscuro'] body .auth-page .forgot-modal-overlay { background-color: #000b; }
+html[data-theme='oscuro'] body .reset-card .secondary { background-color: var(--hg-surface-raised); color: var(--hg-text-primary); }
+
+/* Mi Huella: neutralize the component's light gradient and white action surfaces. */
+html[data-theme='oscuro'] body .app-frame .workspace .section-page .latest-card {
+  background: var(--hg-surface);
+  border-color: var(--hg-border);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .section-page :is(
+  .latest-card h2,.content-card h2,.profile-list strong,.objective-line strong,
+  .history-row strong,.activity-item strong,.equivalence-grid strong
+) { color: var(--hg-text); }
+html[data-theme='oscuro'] body .app-frame .workspace .section-page :is(
+  .latest-card h2 small,.latest-label,.profile-list small,.objective-line span,
+  .history-row,.history-header,.equivalence-grid small,.quick-action small
+) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .section-page :is(.objective-line,.activity-item,.equivalence-grid > div) {
+  background-color: var(--hg-surface-raised);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .section-page :is(.profile-list li,.history-header,.history-row) { border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .app-frame .workspace .section-page .quick-action {
+  background-color: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .section-page .quick-action:hover { background-color: var(--hg-surface-hover-strong); border-color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .section-page :is(.quick-icon,.check.done) { background-color: var(--hg-surface-hover); color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .section-page :is(.progress-label,.quick-action b) { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .section-page .impact { background-color: var(--hg-surface-hover); color: var(--hg-green); }
+
+/* Retos: keep EcoPuntos, challenge details and actions legible over dark cards. */
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .points-summary { background-color: var(--hg-surface); border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .points-summary strong { color: var(--hg-text); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .points-summary small { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .points-leaf { background-color: var(--hg-surface-hover); color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .reto-card { background-color: var(--hg-surface); border-color: var(--hg-border); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .reto-card-image { background-color: var(--hg-sidebar); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .reto-card-body { background-color: var(--hg-surface); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .reto-card-body h2 { color: var(--hg-text); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page :is(.reto-card-body > p,.reto-card-footer > span) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .difficulty { background-color: var(--hg-button-primary); color: var(--hg-on-accent); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .difficulty.medium { background-color: #f59e0b; color: #171100; }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .difficulty.hard { background-color: #b91c1c; color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .difficulty.unknown { background-color: #555; color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .points { background-color: var(--hg-surface-inset); color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .points span { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page :is(.reto-card-footer button,.colectivo-footer button) {
+  background-color: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page :is(.reto-card-footer button,.colectivo-footer button):hover {
+  background-color: var(--hg-button-primary);
+  border-color: var(--hg-button-primary);
+  color: var(--hg-on-accent);
+}
+
+/* Recomendaciones: darken only the nested copy surfaces and category chips. */
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.recommendation-card,.detail-modal,.empty-state) {
+  background-color: var(--hg-surface);
+  border-color: var(--hg-border);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.recommendation-card h2,.detail-modal h2) { color: var(--hg-text); }
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.description,.reason,.detail-modal > p,.explanation p,.empty-state p) { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.reason strong,.current-emissions strong,.explanation strong) { color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.current-emissions,.impact-note,.explanation,.modal-emissions) {
+  background-color: var(--hg-surface-raised);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.category-chip,.priority,.history-badge,.priority-alta,.priority-media,.priority-baja) {
+  background-color: var(--hg-surface-hover);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.category-chip,.priority-label) { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page .history-date { color: var(--hg-text-secondary); }
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.text-button,.close-button) {
+  background-color: var(--hg-surface-raised);
+  border-color: var(--hg-border);
+  color: var(--hg-text-primary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .recommendations-page :is(.text-button,.close-button):hover { background-color: var(--hg-surface-hover-strong); }
+
+/* This PNG is a dark outline; filter only the bell, leaving the red badge unchanged. */
+html[data-theme='oscuro'] body .app-frame .notification-wrap > .notification {
+  background-color: var(--hg-surface-raised);
+}
+html[data-theme='oscuro'] body .app-frame .notification-wrap > .notification img { filter: brightness(0) invert(1); }
+/* Retos only: the content tray and tab badges must use dark surfaces. */
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page > .cards-panel {
+  background-color: var(--hg-surface);
+  border-color: var(--hg-border);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .tabs .tab.active {
+  background-color: #15803d;
+  color: #ffffff;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .tabs .tab.active .tab-icon { color: #ffffff; }
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .tabs .tab-count {
+  background-color: var(--hg-surface-hover-strong);
+  color: var(--hg-text-secondary);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .challenges-page .tabs .tab.active .tab-count {
+  background-color: var(--hg-surface);
+  color: #ffffff;
+}
+
+/* Ranking only: dark medal metals, legible table and high-contrast own row. */
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .ranking-card { background-color: #1e1e1e; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .podium-item { background: transparent; color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .podium-item.first {
+  background: linear-gradient(180deg, #292515 0%, transparent 100%);
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .podium-item :is(h3,.level) { color: var(--hg-text-primary); }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .podium-item h3 span { color: #ffffff; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .podium-item .points { color: var(--hg-green); }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .first .medal {
+  border-color: #facc15;
+  background: #3a3010;
+  color: #facc15;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .second .medal {
+  border-color: #cbd5e1;
+  background: #2a2f36;
+  color: #e2e8f0;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .third .medal {
+  border-color: #cd7f32;
+  background: #38271a;
+  color: #e7a15f;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .first .podium-base { background: #6b5611; color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .second .podium-base { background: #4b5563; color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .third .podium-base { background: #6b4226; color: #fff; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card { background-color: #1e1e1e; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card th {
+  color: #bdbdbd;
+  border-bottom-color: #484848;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card td {
+  color: #f5f5f5;
+  border-bottom-color: #333333;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr:hover { background-color: #292929; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .rank-number { color: #bdbdbd; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .level-pill {
+  background-color: #303030;
+  color: #bdbdbd;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .points-cell { color: #22c55e; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row,
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row:hover {
+  background-color: #14532d;
+  box-shadow: inset 4px 0 #4ade80;
+}
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row td,
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row .participant-name,
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row .participant-name span,
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row .rank-number,
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row .level-pill { color: #ffffff; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row .level-pill { background-color: #166534; }
+html[data-theme='oscuro'] body .app-frame .workspace .ranking-page .table-card tbody tr.user-row .points-cell { color: #4ade80; }
